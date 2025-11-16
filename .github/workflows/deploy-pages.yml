@@ -1,0 +1,60 @@
+name: Build and Deploy to GitHub Pages
+
+# Build the Next.js app, export static HTML, and publish the 'out' directory to GitHub Pages.
+# Note: Next's `next export` only supports static-friendly pages. If your app uses dynamic
+# server-only features or the App Router heavily, consider deploying to Vercel or another
+# Node host instead. This workflow uses the official GitHub Pages actions.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-upload:
+    name: Build and upload artifact
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint -- --max-warnings=0
+
+      - name: Typecheck
+        run: npx tsc --noEmit
+
+      - name: Build
+        run: npm run build --if-present
+
+      - name: Export static HTML
+        # next export will read the build output and generate a static `out/` folder
+        run: npx next export --outdir out
+
+      - name: Upload artifact for GitHub Pages
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: out
+
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build-and-upload
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1
