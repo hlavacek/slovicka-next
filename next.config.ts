@@ -3,8 +3,8 @@ import createNextIntlPlugin from 'next-intl/plugin';
 
 const nextConfig: NextConfig = {
   output: 'export',
-  basePath: "/slovicka-next"
-  /* config options here */
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || ""
+  /* config options here */ 
 };
 
 const withNextIntl = createNextIntlPlugin();

@@ -50,7 +50,12 @@ jobs:
       - name: Typecheck
         run: npx tsc --noEmit
 
+      - name: Test
+        run: npm test
+
       - name: Build
+        env:
+          NEXT_PUBLIC_BASE_PATH: '/slovicka-next' 
         run: npm run build --if-present
 
       - name: Upload artifact for GitHub Pages
