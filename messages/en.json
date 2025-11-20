@@ -1,5 +1,26 @@
 {
   "HomePage": {
     "title": "Hello world!"
+  },
+  "WordSets": {
+    "createTitle": "Create word set",
+    "formTitle": "Create a word set",
+    "setNameLabel": "Set name",
+    "setNamePlaceholder": "e.g. Animals or My First Words",
+    "entriesLabel": "Entries",
+    "addRow": "Add row",
+    "slovakPlaceholder": "Slovak",
+    "englishPlaceholder": "English",
+    "removeButton": "Remove",
+    "saveButton": "Save set",
+    "importButton": "Import",
+    "savedSetsTitle": "Saved sets",
+    "noSavedSets": "No saved sets yet.",
+    "entriesCount": "{count} entries",
+    "loadButton": "Load",
+    "exportButton": "Export",
+    "errorEmptyName": "Please provide a name for the word set",
+    "errorEmptyEntries": "Please provide at least one entry",
+    "errorMissingFields": "All rows must have both Slovak and English entries"
   }
 }

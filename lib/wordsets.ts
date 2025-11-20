@@ -76,12 +76,18 @@ export function importWordSet(raw: string): WordSet {
   return set
 }
 
+/**
+ * Validates word set input and returns error key if validation fails
+ * @param name - The name of the word set
+ * @param entries - Array of word pairs
+ * @returns Error translation key or null if valid
+ */
 export function validateWordSetInput(name: string, entries: WordPair[]): string | null {
-  if (!name || !name.trim()) return "Please provide a name for the word set"
-  if (!Array.isArray(entries) || entries.length === 0) return "Please provide at least one entry"
+  if (!name || !name.trim()) return "errorEmptyName"
+  if (!Array.isArray(entries) || entries.length === 0) return "errorEmptyEntries"
   for (const e of entries) {
     if (!e.sk || !String(e.sk).trim() || !e.en || !String(e.en).trim()) {
-      return "All rows must have both Slovak and English entries"
+      return "errorMissingFields"
     }
   }
   return null

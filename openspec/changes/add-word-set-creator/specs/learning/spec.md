@@ -47,3 +47,12 @@ The system SHALL ensure the word set creation form is keyboard accessible and fo
 - **WHEN** they use Tab/Shift+Tab to navigate form fields
 - **THEN** all interactive elements are reachable
 - **AND** form labels and ARIA attributes are properly associated
+
+### Requirement: Internationalization
+The system SHALL use next-intl for all user-facing text to support multiple languages (Slovak, English).
+
+#### Scenario: UI text is translatable
+- **GIVEN** the application is configured with next-intl
+- **WHEN** a user views the word set creation page
+- **THEN** all labels, buttons, placeholders, and messages use translation keys
+- **AND** the interface adapts to the selected locale

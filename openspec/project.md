@@ -32,6 +32,12 @@ Goals:
 - Use the App Router under `app/` for routes and server components. Use `"use client"` only for interactive components.
 - Prefer small components and extract complex logic into hooks (e.g., `hooks/`) or `lib/` helpers.
 
+### Internationalization
+The system SHALL use next-intl for all user-facing text to support multiple languages (Slovak, English).
+
+- All labels, buttons, placeholders, and messages use translation keys
+- the translations are placed in `messages/*.json` files
+
 ### Testing Strategy
 - Unit tests: Jest + React Testing Library for components and pure functions.
 - Integration tests: small integration tests for data flows (e.g., quiz flow, scoring).

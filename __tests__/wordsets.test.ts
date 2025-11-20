@@ -2,27 +2,27 @@ import { importWordSet, exportWordSet, validateWordSetInput, WordSet, WordPair }
 
 describe('wordsets utilities', () => {
   describe('validateWordSetInput', () => {
-    test('rejects empty name', () => {
+    test('returns error key for empty name', () => {
       const entries: WordPair[] = [{ sk: 'dom', en: 'house' }]
-      expect(validateWordSetInput('', entries)).toBeTruthy()
-      expect(validateWordSetInput('  ', entries)).toBeTruthy()
+      expect(validateWordSetInput('', entries)).toBe('errorEmptyName')
+      expect(validateWordSetInput('  ', entries)).toBe('errorEmptyName')
     })
 
-    test('rejects empty entries array', () => {
-      expect(validateWordSetInput('My Set', [])).toBeTruthy()
+    test('returns error key for empty entries array', () => {
+      expect(validateWordSetInput('My Set', [])).toBe('errorEmptyEntries')
     })
 
-    test('rejects entries with missing Slovak word', () => {
+    test('returns error key for entries with missing Slovak word', () => {
       const entries: WordPair[] = [{ sk: '', en: 'house' }]
-      expect(validateWordSetInput('My Set', entries)).toBeTruthy()
+      expect(validateWordSetInput('My Set', entries)).toBe('errorMissingFields')
     })
 
-    test('rejects entries with missing English word', () => {
+    test('returns error key for entries with missing English word', () => {
       const entries: WordPair[] = [{ sk: 'dom', en: '' }]
-      expect(validateWordSetInput('My Set', entries)).toBeTruthy()
+      expect(validateWordSetInput('My Set', entries)).toBe('errorMissingFields')
     })
 
-    test('accepts valid input', () => {
+    test('returns null for valid input', () => {
       const entries: WordPair[] = [
         { sk: 'dom', en: 'house' },
         { sk: 'auto', en: 'car' },

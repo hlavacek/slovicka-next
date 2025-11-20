@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
+import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { WordPair, WordSet, loadWordSets, saveWordSet, exportWordSet, importWordSet, validateWordSetInput } from "@/lib/wordsets"
@@ -22,6 +23,7 @@ function downloadFile(filename: string, content: string) {
 }
 
 export default function WordSetForm({ className }: { className?: string }) {
+  const t = useTranslations("WordSets")
   const [name, setName] = useState("")
   const [rows, setRows] = useState<Row[]>([{ id: genId(), sk: "", en: "" }])
   const [savedSets, setSavedSets] = useState<WordSet[]>(() => loadWordSets())
@@ -41,9 +43,9 @@ export default function WordSetForm({ className }: { className?: string }) {
 
   function validate(): boolean {
     const entries = rows.map((r) => ({ sk: r.sk, en: r.en }))
-    const err = validateWordSetInput(name, entries)
-    if (err) {
-      setError(err)
+    const errorKey = validateWordSetInput(name, entries)
+    if (errorKey) {
+      setError(t(errorKey))
       return false
     }
     setError(null)
@@ -95,21 +97,21 @@ export default function WordSetForm({ className }: { className?: string }) {
 
   return (
     <div className={cn("w-full rounded-md border bg-white p-6 shadow-sm", className)}>
-      <h2 className="mb-4 text-lg font-semibold">Create a word set</h2>
+      <h2 className="mb-4 text-lg font-semibold">{t("formTitle")}</h2>
 
-      <label className="mb-2 block text-sm font-medium">Set name</label>
+      <label className="mb-2 block text-sm font-medium">{t("setNameLabel")}</label>
       <input
         value={name}
         onChange={(e) => setName(e.target.value)}
         className="mb-4 w-full rounded-md border px-3 py-2"
-        placeholder="e.g. Animals or My First Words"
+        placeholder={t("setNamePlaceholder")}
       />
 
       <div className="mb-4">
         <div className="mb-2 flex items-center justify-between">
-          <div className="text-sm font-medium">Entries</div>
+          <div className="text-sm font-medium">{t("entriesLabel")}</div>
           <Button variant="ghost" onClick={addRow} size="sm">
-            + Add row
+            {t("addRow")}
           </Button>
         </div>
 
@@ -118,18 +120,18 @@ export default function WordSetForm({ className }: { className?: string }) {
             <div key={row.id} className="flex gap-2">
               <input
                 className="w-1/2 rounded-md border px-2 py-2"
-                placeholder="Slovak"
+                placeholder={t("slovakPlaceholder")}
                 value={row.sk}
                 onChange={(e) => updateRow(row.id, "sk", e.target.value)}
               />
               <input
                 className="w-1/2 rounded-md border px-2 py-2"
-                placeholder="English"
+                placeholder={t("englishPlaceholder")}
                 value={row.en}
                 onChange={(e) => updateRow(row.id, "en", e.target.value)}
               />
               <Button variant="outline" onClick={() => removeRow(row.id)} size="sm">
-                Remove
+                {t("removeButton")}
               </Button>
             </div>
           ))}
@@ -139,29 +141,29 @@ export default function WordSetForm({ className }: { className?: string }) {
       {error && <div className="mb-4 text-sm text-red-700">{error}</div>}
 
       <div className="mb-4 flex gap-2">
-        <Button onClick={onSave}>Save set</Button>
+        <Button onClick={onSave}>{t("saveButton")}</Button>
         <label className="flex items-center gap-2">
           <input type="file" accept="application/json" onChange={onImport} className="hidden" />
-          <Button variant="outline" type="button">Import</Button>
+          <Button variant="outline" type="button">{t("importButton")}</Button>
         </label>
       </div>
 
       <div className="mt-6">
-        <h3 className="mb-2 text-sm font-medium">Saved sets</h3>
+        <h3 className="mb-2 text-sm font-medium">{t("savedSetsTitle")}</h3>
         <div className="flex flex-col gap-2">
-          {savedSets.length === 0 && <div className="text-sm text-zinc-500">No saved sets yet.</div>}
+          {savedSets.length === 0 && <div className="text-sm text-zinc-500">{t("noSavedSets")}</div>}
           {savedSets.map((s) => (
             <div key={s.id} className="flex items-center justify-between gap-2 rounded-md border px-3 py-2">
               <div>
                 <div className="font-medium">{s.name}</div>
-                <div className="text-sm text-zinc-500">{s.entries.length} entries</div>
+                <div className="text-sm text-zinc-500">{t("entriesCount", { count: s.entries.length })}</div>
               </div>
               <div className="flex gap-2">
                 <Button variant="ghost" onClick={() => loadSet(s)} size="sm">
-                  Load
+                  {t("loadButton")}
                 </Button>
                 <Button variant="outline" onClick={() => onExport(s)} size="sm">
-                  Export
+                  {t("exportButton")}
                 </Button>
               </div>
             </div>

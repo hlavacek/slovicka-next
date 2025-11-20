@@ -1,0 +1,26 @@
+{
+  "HomePage": {
+    "title": "Ahoj svet!"
+  },
+  "WordSets": {
+    "createTitle": "Vytvoriť súbor slovíčok",
+    "formTitle": "Vytvoriť súbor slovíčok",
+    "setNameLabel": "Názov súboru",
+    "setNamePlaceholder": "napr. Zvieratá alebo Moje prvé slová",
+    "entriesLabel": "Položky",
+    "addRow": "Pridať riadok",
+    "slovakPlaceholder": "Slovensky",
+    "englishPlaceholder": "Anglicky",
+    "removeButton": "Odstrániť",
+    "saveButton": "Uložiť súbor",
+    "importButton": "Importovať",
+    "savedSetsTitle": "Uložené súbory",
+    "noSavedSets": "Zatiaľ žiadne uložené súbory.",
+    "entriesCount": "{count} položiek",
+    "loadButton": "Načítať",
+    "exportButton": "Exportovať",
+    "errorEmptyName": "Prosím zadajte názov súboru slovíčok",
+    "errorEmptyEntries": "Prosím zadajte aspoň jednu položku",
+    "errorMissingFields": "Všetky riadky musia obsahovať slovenské aj anglické slovo"
+  }
+}
