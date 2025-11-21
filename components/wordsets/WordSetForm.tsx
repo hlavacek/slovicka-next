@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { WordPair, WordSet, loadWordSets, saveWordSet, exportWordSet, importWordSet, validateWordSetInput } from "@/lib/wordsets"
+import { WordPair, WordSet, loadWordSets, saveWordSet, exportWordSet, importWordSet, validateWordSetInput, deleteWordSet } from "@/lib/wordsets"
 
 type Row = WordPair & { id: string }
 
@@ -107,9 +107,15 @@ export default function WordSetForm({ className }: { className?: string }) {
     setRows(set.entries.map((e) => ({ id: genId(), ...e })))
   }
 
+  function onDelete(set: WordSet) {
+    const confirmed = window.confirm(t("deleteConfirmation"))
+    if (!confirmed) return
+    deleteWordSet(set.id)
+    setSavedSets(loadWordSets())
+  }
+
   return (
     <div className={cn("w-full rounded-md border bg-white p-6 shadow-sm", className)}>
-      <h2 className="mb-4 text-lg font-semibold">{t("formTitle")}</h2>
 
       <label className="mb-2 block text-sm font-medium">{t("setNameLabel")}</label>
       <input
@@ -182,6 +188,9 @@ export default function WordSetForm({ className }: { className?: string }) {
                 </Button>
                 <Button variant="outline" onClick={() => onExport(s)} size="sm">
                   {t("exportButton")}
+                </Button>
+                <Button variant="destructive" onClick={() => onDelete(s)} size="sm">
+                  {t("deleteButton")}
                 </Button>
               </div>
             </div>

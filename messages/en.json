@@ -19,9 +19,12 @@
     "entriesCount": "{count} entries",
     "loadButton": "Load",
     "exportButton": "Export",
+    "deleteButton": "Delete",
+    "deleteConfirmation": "Are you sure you want to delete this word set?",
     "errorEmptyName": "Please provide a name for the word set",
     "errorEmptyEntries": "Please provide at least one entry",
-    "errorMissingFields": "All rows must have both Slovak and English entries"
+    "errorMissingFields": "All rows must have both Slovak and English entries",
+    "backToQuizButton": "Back to Quiz"
   },
   "Quiz": {
     "title": "Practice Quiz",
@@ -34,6 +37,7 @@
     "startButton": "Start Quiz",
     "noWordSets": "You don't have any word sets yet.",
     "createWordSetLink": "Create your first word set",
+    "createNewWordSetLink": "Create new word set",
     "progressLabel": "Progress",
     "showAnswerButton": "Show Answer",
     "markCorrectButton": "Mark Correct",

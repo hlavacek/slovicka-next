@@ -19,9 +19,12 @@
     "entriesCount": "{count} položiek",
     "loadButton": "Načítať",
     "exportButton": "Exportovať",
+    "deleteButton": "Odstrániť",
+    "deleteConfirmation": "Naozaj chcete odstrániť tento súbor slovíčok?",
     "errorEmptyName": "Prosím zadajte názov súboru slovíčok",
     "errorEmptyEntries": "Prosím zadajte aspoň jednu položku",
-    "errorMissingFields": "Všetky riadky musia obsahovať slovenské aj anglické slovo"
+    "errorMissingFields": "Všetky riadky musia obsahovať slovenské aj anglické slovo",
+    "backToQuizButton": "Späť na precvičovanie"
   },
   "Quiz": {
     "title": "Precvičovanie slovíčok",
@@ -34,6 +37,7 @@
     "startButton": "Začať precvičovanie",
     "noWordSets": "Nemáte ešte žiadne súbory slovíčok.",
     "createWordSetLink": "Vytvoriť prvý súbor slovíčok",
+    "createNewWordSetLink": "Vytvoriť nový súbor slovíčok",
     "progressLabel": "Postup",
     "showAnswerButton": "Zobraziť odpoveď",
     "markCorrectButton": "Vedel/a som",

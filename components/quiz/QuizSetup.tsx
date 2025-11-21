@@ -1,30 +1,30 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { useTranslations } from "next-intl"
-import { Button } from "@/components/ui/button"
-import { WordSet } from "@/lib/wordsets"
-import { SourceLanguage } from "@/lib/quiz"
-import { cn } from "@/lib/utils"
-import Link from "next/link"
+import React, { useState } from "react";
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { WordSet } from "@/lib/wordsets";
+import { SourceLanguage } from "@/lib/quiz";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 type QuizSetupProps = {
-  wordSets: WordSet[]
-  onStart: (wordSet: WordSet, sourceLanguage: SourceLanguage) => void
-}
+  wordSets: WordSet[];
+  onStart: (wordSet: WordSet, sourceLanguage: SourceLanguage) => void;
+};
 
 export default function QuizSetup({ wordSets, onStart }: QuizSetupProps) {
-  const t = useTranslations("Quiz")
-  const [selectedSetId, setSelectedSetId] = useState<string | null>(null)
-  const [sourceLanguage, setSourceLanguage] = useState<SourceLanguage>("sk")
+  const t = useTranslations("Quiz");
+  const [selectedSetId, setSelectedSetId] = useState<string | null>(null);
+  const [sourceLanguage, setSourceLanguage] = useState<SourceLanguage>("sk");
 
-  const canStart = selectedSetId !== null
+  const canStart = selectedSetId !== null;
 
   function handleStart() {
-    if (!selectedSetId) return
-    const wordSet = wordSets.find((ws) => ws.id === selectedSetId)
-    if (!wordSet) return
-    onStart(wordSet, sourceLanguage)
+    if (!selectedSetId) return;
+    const wordSet = wordSets.find((ws) => ws.id === selectedSetId);
+    if (!wordSet) return;
+    onStart(wordSet, sourceLanguage);
   }
 
   if (wordSets.length === 0) {
@@ -36,13 +36,41 @@ export default function QuizSetup({ wordSets, onStart }: QuizSetupProps) {
           <Button>{t("createWordSetLink")}</Button>
         </Link>
       </div>
-    )
+    );
   }
 
   return (
     <div className="w-full max-w-2xl rounded-md border bg-white p-6 shadow-sm">
       <h2 className="mb-4 text-lg font-semibold">{t("title")}</h2>
       <p className="mb-4 text-sm text-zinc-600">{t("instructions")}</p>
+
+      <div className="mb-6 gap-4 flex">
+        <label className="text-sm font-medium items-center flex">
+          {t("sourceLanguageLabel")}
+        </label>
+        <label className="flex cursor-pointer items-center gap-2">
+          <input
+            type="radio"
+            name="language"
+            value="sk"
+            checked={sourceLanguage === "sk"}
+            onChange={() => setSourceLanguage("sk")}
+            className="h-4 w-4"
+          />
+          <span>{t("slovakLabel")}</span>
+        </label>
+        <label className="flex cursor-pointer items-center gap-2">
+          <input
+            type="radio"
+            name="language"
+            value="en"
+            checked={sourceLanguage === "en"}
+            onChange={() => setSourceLanguage("en")}
+            className="h-4 w-4"
+          />
+          <span>{t("englishLabel")}</span>
+        </label>
+      </div>
 
       <div className="mb-6">
         <label className="mb-2 block text-sm font-medium">
@@ -76,39 +104,15 @@ export default function QuizSetup({ wordSets, onStart }: QuizSetupProps) {
         </div>
       </div>
 
-      <div className="mb-6">
-        <label className="mb-2 block text-sm font-medium">
-          {t("sourceLanguageLabel")}
-        </label>
-        <div className="flex gap-4">
-          <label className="flex cursor-pointer items-center gap-2">
-            <input
-              type="radio"
-              name="language"
-              value="sk"
-              checked={sourceLanguage === "sk"}
-              onChange={() => setSourceLanguage("sk")}
-              className="h-4 w-4"
-            />
-            <span>{t("slovakLabel")}</span>
-          </label>
-          <label className="flex cursor-pointer items-center gap-2">
-            <input
-              type="radio"
-              name="language"
-              value="en"
-              checked={sourceLanguage === "en"}
-              onChange={() => setSourceLanguage("en")}
-              className="h-4 w-4"
-            />
-            <span>{t("englishLabel")}</span>
-          </label>
-        </div>
-      </div>
+      <div className="flex mb-6 gap-4">
+        <Button onClick={handleStart} disabled={!canStart}>
+          {t("startButton")}
+        </Button>
 
-      <Button onClick={handleStart} disabled={!canStart}>
-        {t("startButton")}
-      </Button>
+        <Link href="/word-sets/new">
+          <Button variant="outline">{t("createNewWordSetLink")}</Button>
+        </Link>
+      </div>
     </div>
-  )
+  );
 }
