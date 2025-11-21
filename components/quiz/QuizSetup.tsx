@@ -42,9 +42,8 @@ export default function QuizSetup({ wordSets, onStart }: QuizSetupProps) {
   return (
     <div className="w-full max-w-2xl rounded-md border bg-white p-6 shadow-sm">
       <h2 className="mb-4 text-lg font-semibold">{t("title")}</h2>
-      <p className="mb-4 text-sm text-zinc-600">{t("instructions")}</p>
 
-      <div className="mb-6 gap-4 flex">
+      <div className="mb-6 gap-4 flex flex-wrap">
         <label className="text-sm font-medium items-center flex">
           {t("sourceLanguageLabel")}
         </label>
@@ -57,7 +56,7 @@ export default function QuizSetup({ wordSets, onStart }: QuizSetupProps) {
             onChange={() => setSourceLanguage("sk")}
             className="h-4 w-4"
           />
-          <span>{t("slovakLabel")}</span>
+          <span>{t("englishLabel")}</span>
         </label>
         <label className="flex cursor-pointer items-center gap-2">
           <input
@@ -68,7 +67,7 @@ export default function QuizSetup({ wordSets, onStart }: QuizSetupProps) {
             onChange={() => setSourceLanguage("en")}
             className="h-4 w-4"
           />
-          <span>{t("englishLabel")}</span>
+          <span>{t("slovakLabel")}</span>
         </label>
       </div>
 
@@ -104,7 +103,7 @@ export default function QuizSetup({ wordSets, onStart }: QuizSetupProps) {
         </div>
       </div>
 
-      <div className="flex mb-6 gap-4">
+      <div className="flex mb-6 gap-4 flex-wrap">
         <Button onClick={handleStart} disabled={!canStart}>
           {t("startButton")}
         </Button>
