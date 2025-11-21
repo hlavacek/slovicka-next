@@ -65,14 +65,14 @@ The system SHALL provide a quiz setup interface where users can select a word se
 
 #### Scenario: User selects word set and source language
 - **GIVEN** a user has at least one saved word set
-- **WHEN** they navigate to `/quiz`
+- **WHEN** they navigate to `/`
 - **THEN** the system displays a list of available word sets
 - **AND** provides radio buttons or select controls to choose source language (Slovak or English)
 - **AND** displays a "Start Quiz" button
 
 #### Scenario: No word sets available
 - **GIVEN** a user has no saved word sets
-- **WHEN** they navigate to `/quiz`
+- **WHEN** they navigate to `/`
 - **THEN** the system displays a message indicating no word sets are available
 - **AND** provides a link to the word set creation page
 
@@ -149,3 +149,4 @@ The system SHALL use next-intl for all quiz-related UI text to support multiple 
 - **WHEN** a user views any quiz screen
 - **THEN** all labels, buttons, messages, and instructions use translation keys
 - **AND** the interface adapts to the selected locale (Slovak, English)
+
