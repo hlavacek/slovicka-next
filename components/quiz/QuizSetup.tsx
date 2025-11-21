@@ -79,7 +79,10 @@ export default function QuizSetup({ wordSets, onStart }: QuizSetupProps) {
 
       <div className="mb-6">
         <label className="flex cursor-pointer items-center gap-2">
-          <Switch checked={randomOrder} onCheckedChange={(checked) => setRandomOrder(checked)} />
+          <Switch
+            checked={randomOrder}
+            onCheckedChange={(checked) => setRandomOrder(checked)}
+          />
           <span className="text-sm">{t("randomOrderLabel")}</span>
         </label>
       </div>
@@ -108,7 +111,7 @@ export default function QuizSetup({ wordSets, onStart }: QuizSetupProps) {
               <div>
                 <div className="font-medium">{ws.name}</div>
                 <div className="text-sm text-zinc-500">
-                   {t("entriesCount", { count: ws.entries.length })}
+                  {t("entriesCount", { count: ws.entries.length })}
                 </div>
               </div>
             </label>
