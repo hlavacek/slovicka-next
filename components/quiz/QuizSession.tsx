@@ -4,6 +4,7 @@ import React from "react"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { QuizState } from "@/lib/quiz"
+import { speakWord } from "@/lib/speech"
 
 type QuizSessionProps = {
   state: QuizState
@@ -21,6 +22,15 @@ export default function QuizSession({
   const t = useTranslations("Quiz")
   const currentQuestion = state.questions[state.currentIndex]
   const progress = `${state.currentIndex + 1} / ${state.questions.length}`
+
+  // Speak the target word when the answer is revealed
+  React.useEffect(() => {
+    if (currentQuestion.revealed) {
+      // Determine target language (opposite of source language)
+      const targetLanguage = state.config.sourceLanguage === "sk" ? "en" : "sk"
+      speakWord(currentQuestion.targetWord, targetLanguage)
+    }
+  }, [currentQuestion.revealed, currentQuestion.targetWord, state.config.sourceLanguage])
 
   return (
     <div className="w-full max-w-2xl rounded-md border bg-white p-6 shadow-sm">
