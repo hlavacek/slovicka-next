@@ -110,30 +110,38 @@ The system SHALL provide a quiz setup interface where users can select a word se
 - **AND** the user can create a new word set
 
 ### Requirement: Sequential Quiz Flow
-The system SHALL present words from the selected word set one at a time in sequential order, allowing users to self-assess their knowledge.
+The system SHALL present words from the selected word set one at a time in sequential order, allowing users to self-assess their knowledge, with automatic pronunciation of the target word when revealed.
 
-#### Scenario: Quiz session displays one word at a time
-- **GIVEN** a user has started a quiz with a selected word set and source language
-- **WHEN** the quiz begins
-- **THEN** the system displays the first word in the source language
-- **AND** hides the target language translation
-- **AND** displays a "Show Answer" button
-- **AND** displays progress information (e.g., "Question 1 of 10")
-
-#### Scenario: User reveals answer
+#### Scenario: User reveals answer with pronunciation
 - **GIVEN** a user is viewing a quiz question
 - **WHEN** they click the "Show Answer" button
 - **THEN** the system reveals the target language translation
+- **AND** automatically pronounces the target word using text-to-speech
+- **AND** uses the appropriate language voice (Slovak for Slovak words, English for English words)
 - **AND** displays two buttons: "Mark Correct" and "Mark Incorrect"
 - **AND** hides the "Show Answer" button
 
-#### Scenario: User marks answer and proceeds
-- **GIVEN** a user has revealed an answer
+#### Scenario: Speech synthesis gracefully degrades
+- **GIVEN** a user is taking a quiz in a browser without speech synthesis support
+- **WHEN** they reveal an answer
+- **THEN** the system displays the target word normally
+- **AND** does not produce any error messages
+- **AND** the quiz continues to function without audio
+
+#### Scenario: Speech uses correct language voice
+- **GIVEN** a user is practicing from Slovak to English
+- **WHEN** they reveal an answer
+- **THEN** the system speaks the English word using an English voice
+
+- **GIVEN** a user is practicing from English to Slovak
+- **WHEN** they reveal an answer
+- **THEN** the system speaks the Slovak word using a Slovak voice
+
+#### Scenario: Speech does not block quiz progression
+- **GIVEN** a user has revealed an answer and speech is playing
 - **WHEN** they click "Mark Correct" or "Mark Incorrect"
-- **THEN** the system records the result
-- **AND** advances to the next word in the sequence
-- **AND** updates the progress indicator
-- **OR** displays the quiz summary if this was the last word
+- **THEN** the system immediately advances to the next question
+- **AND** does not wait for speech to finish
 
 ### Requirement: Quiz Results Summary
 The system SHALL display a summary of quiz results after all words have been reviewed, showing performance statistics.
