@@ -29,10 +29,11 @@
   "Quiz": {
     "title": "Precvičovanie slovíčok",
     "selectWordSetLabel": "Vyberte zoznam slovíčok",
-    "entriesLabel": "položiek",
+    "entriesCount": "{count, plural, =0 {# položiek} =1 {# položka} few {# položky} other {# položiek}}",
     "sourceLanguageLabel": "Skúšať",
     "slovakLabel": "Slovenčina",
     "englishLabel": "Angličtina",
+    "randomOrderLabel": "Náhodné poradie",
     "startButton": "Začať precvičovanie",
     "noWordSets": "Nemáte ešte žiadne zoznamy slovíčok.",
     "createWordSetLink": "Vytvoriť prvý zoznam slovíčok",

@@ -29,8 +29,12 @@ export default function Home() {
     });
   }, []);
 
-  function handleStartQuiz(wordSet: WordSet, sourceLanguage: SourceLanguage) {
-    const initialState = initializeQuiz(wordSet, sourceLanguage);
+  function handleStartQuiz(
+    wordSet: WordSet,
+    sourceLanguage: SourceLanguage,
+    randomOrder: boolean,
+  ) {
+    const initialState = initializeQuiz(wordSet, sourceLanguage, randomOrder);
     setQuizState(initialState);
     setPhase("session");
   }

@@ -3,9 +3,7 @@
 ## Purpose
 
 TBD - created by archiving change add-word-set-creator. Update Purpose after archive.
-
 ## Requirements
-
 ### Requirement: Word Set Creation
 
 The system SHALL provide a user interface for creating custom vocabulary word sets containing Slovak ↔ English word pairs with navigation back to the quiz page.
@@ -106,70 +104,53 @@ The system SHALL use next-intl for all user-facing text to support multiple lang
 - **AND** screen readers and browsers correctly identify the content language
 
 ### Requirement: Quiz Setup Interface
+The system SHALL provide a quiz setup interface where users can select a word set, choose the source language for practice, and optionally enable random question order, with persistent access to create new word sets.
 
-The system SHALL provide a quiz setup interface where users can select a word set and choose the source language for practice, with persistent access to create new word sets.
-
-#### Scenario: User selects word set and source language
-
+#### Scenario: User selects word set, source language, and question order
 - **GIVEN** a user has at least one saved word set
 - **WHEN** they navigate to `/`
 - **THEN** the system displays a list of available word sets
 - **AND** provides radio buttons or select controls to choose source language (Slovak or English)
+- **AND** provides a checkbox to enable random question order (unchecked by default)
 - **AND** displays a "Start Quiz" button
 - **AND** displays a link to create new word sets
 
-#### Scenario: No word sets available
-
-- **GIVEN** a user has no saved word sets
-- **WHEN** they navigate to `/`
-- **THEN** the system displays a message indicating no word sets are available
-- **AND** provides a link to the word set creation page
-
-#### Scenario: User navigates to create word sets from quiz setup
-
+#### Scenario: User enables random order
 - **GIVEN** a user is on the quiz setup page
-- **WHEN** they click the create word set link
-- **THEN** the system navigates to `/word-sets/new`
-- **AND** the user can create a new word set
+- **WHEN** they check the "Random order" checkbox
+- **AND** they start the quiz
+- **THEN** the system randomizes the order of questions at initialization
+- **AND** presents words in the randomized sequence
+
+#### Scenario: Random order checkbox is accessible
+- **GIVEN** a user is navigating with keyboard only
+- **WHEN** they tab to the random order checkbox
+- **THEN** the checkbox receives focus with visible indicator
+- **AND** pressing Space or Enter toggles the checkbox state
 
 ### Requirement: Sequential Quiz Flow
+The system SHALL present words from the selected word set one at a time, either in sequential or randomized order based on user preference, allowing users to self-assess their knowledge.
 
-The system SHALL present words from the selected word set one at a time in sequential order, allowing users to self-assess their knowledge, with automatic pronunciation of the target word when revealed.
+#### Scenario: Quiz session uses sequential order by default
+- **GIVEN** a user has started a quiz without enabling random order
+- **WHEN** the quiz begins
+- **THEN** the system displays words in the original order from the word set
+- **AND** questions advance sequentially through the list
 
-#### Scenario: User reveals answer with pronunciation
+#### Scenario: Quiz session uses random order when selected
+- **GIVEN** a user has started a quiz with random order enabled
+- **WHEN** the quiz begins
+- **THEN** the system displays words in a randomized order
+- **AND** each question appears exactly once
+- **AND** the randomization is performed using Fisher-Yates shuffle algorithm
+- **AND** the order differs from the original word set sequence
 
-- **GIVEN** a user is viewing a quiz question
-- **WHEN** they click the "Show Answer" button
-- **THEN** the system reveals the target language translation
-- **AND** automatically pronounces the target word using text-to-speech
-- **AND** uses the appropriate language voice (Slovak for Slovak words, English for English words)
-- **AND** displays two buttons: "Mark Correct" and "Mark Incorrect"
-- **AND** hides the "Show Answer" button
-
-#### Scenario: Speech synthesis gracefully degrades
-
-- **GIVEN** a user is taking a quiz in a browser without speech synthesis support
-- **WHEN** they reveal an answer
-- **THEN** the system displays the target word normally
-- **AND** does not produce any error messages
-- **AND** the quiz continues to function without audio
-
-#### Scenario: Speech uses correct language voice
-
-- **GIVEN** a user is practicing from Slovak to English
-- **WHEN** they reveal an answer
-- **THEN** the system speaks the English word using an English voice
-
-- **GIVEN** a user is practicing from English to Slovak
-- **WHEN** they reveal an answer
-- **THEN** the system speaks the Slovak word using a Slovak voice
-
-#### Scenario: Speech does not block quiz progression
-
-- **GIVEN** a user has revealed an answer and speech is playing
-- **WHEN** they click "Mark Correct" or "Mark Incorrect"
-- **THEN** the system immediately advances to the next question
-- **AND** does not wait for speech to finish
+#### Scenario: Random order does not affect quiz functionality
+- **GIVEN** a user is taking a quiz in random order
+- **WHEN** they interact with the quiz (reveal, mark correct/incorrect, advance)
+- **THEN** all quiz features work identically to sequential order
+- **AND** progress tracking remains accurate
+- **AND** the final summary shows correct results
 
 ### Requirement: Quiz Results Summary
 
@@ -227,3 +208,4 @@ The system SHALL use next-intl for all quiz-related UI text to support multiple 
 - **WHEN** a user views any quiz screen
 - **THEN** all labels, buttons, messages, and instructions use translation keys
 - **AND** the interface adapts to the selected locale (Slovak, English)
+

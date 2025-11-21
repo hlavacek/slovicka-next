@@ -7,16 +7,22 @@ import { WordSet } from "@/lib/wordsets";
 import { SourceLanguage } from "@/lib/quiz";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { Switch } from "@/components/ui/switch";
 
 type QuizSetupProps = {
   wordSets: WordSet[];
-  onStart: (wordSet: WordSet, sourceLanguage: SourceLanguage) => void;
+  onStart: (
+    wordSet: WordSet,
+    sourceLanguage: SourceLanguage,
+    randomOrder: boolean,
+  ) => void;
 };
 
 export default function QuizSetup({ wordSets, onStart }: QuizSetupProps) {
   const t = useTranslations("Quiz");
   const [selectedSetId, setSelectedSetId] = useState<string | null>(null);
   const [sourceLanguage, setSourceLanguage] = useState<SourceLanguage>("sk");
+  const [randomOrder, setRandomOrder] = useState<boolean>(false);
 
   const canStart = selectedSetId !== null;
 
@@ -24,7 +30,7 @@ export default function QuizSetup({ wordSets, onStart }: QuizSetupProps) {
     if (!selectedSetId) return;
     const wordSet = wordSets.find((ws) => ws.id === selectedSetId);
     if (!wordSet) return;
-    onStart(wordSet, sourceLanguage);
+    onStart(wordSet, sourceLanguage, randomOrder);
   }
 
   if (wordSets.length === 0) {
@@ -72,6 +78,13 @@ export default function QuizSetup({ wordSets, onStart }: QuizSetupProps) {
       </div>
 
       <div className="mb-6">
+        <label className="flex cursor-pointer items-center gap-2">
+          <Switch checked={randomOrder} onCheckedChange={(checked) => setRandomOrder(checked)} />
+          <span className="text-sm">{t("randomOrderLabel")}</span>
+        </label>
+      </div>
+
+      <div className="mb-6">
         <label className="mb-2 block text-sm font-medium">
           {t("selectWordSetLabel")}
         </label>
@@ -95,7 +108,7 @@ export default function QuizSetup({ wordSets, onStart }: QuizSetupProps) {
               <div>
                 <div className="font-medium">{ws.name}</div>
                 <div className="text-sm text-zinc-500">
-                  {ws.entries.length} {t("entriesLabel")}
+                   {t("entriesCount", { count: ws.entries.length })}
                 </div>
               </div>
             </label>

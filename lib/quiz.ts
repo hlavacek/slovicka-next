@@ -1,10 +1,12 @@
 import { WordSet } from "./wordsets";
+import { shuffleArray } from "./utils";
 
 export type SourceLanguage = "sk" | "en";
 
 export type QuizConfig = {
   wordSet: WordSet;
   sourceLanguage: SourceLanguage;
+  randomOrder: boolean;
 };
 
 export type QuizQuestion = {
@@ -33,6 +35,7 @@ export type QuizResult = {
 export function initializeQuiz(
   wordSet: WordSet,
   sourceLanguage: SourceLanguage,
+  randomOrder: boolean = false,
 ): QuizState {
   const questions: QuizQuestion[] = wordSet.entries.map((entry, index) => ({
     index,
@@ -43,9 +46,11 @@ export function initializeQuiz(
     revealed: false,
   }));
 
+  const finalQuestions = randomOrder ? shuffleArray(questions) : questions;
+
   return {
-    config: { wordSet, sourceLanguage },
-    questions,
+    config: { wordSet, sourceLanguage, randomOrder },
+    questions: finalQuestions,
     currentIndex: 0,
     completed: false,
   };
