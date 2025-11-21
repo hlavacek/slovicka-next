@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { WordSet } from "@/lib/wordsets";
 import { SourceLanguage } from "@/lib/quiz";
@@ -11,15 +12,11 @@ import { Switch } from "@/components/ui/switch";
 
 type QuizSetupProps = {
   wordSets: WordSet[];
-  onStart: (
-    wordSet: WordSet,
-    sourceLanguage: SourceLanguage,
-    randomOrder: boolean,
-  ) => void;
 };
 
-export default function QuizSetup({ wordSets, onStart }: QuizSetupProps) {
+export default function QuizSetup({ wordSets }: QuizSetupProps) {
   const t = useTranslations("Quiz");
+  const router = useRouter();
   const [selectedSetId, setSelectedSetId] = useState<string | null>(null);
   const [sourceLanguage, setSourceLanguage] = useState<SourceLanguage>("sk");
   const [randomOrder, setRandomOrder] = useState<boolean>(false);
@@ -28,9 +25,12 @@ export default function QuizSetup({ wordSets, onStart }: QuizSetupProps) {
 
   function handleStart() {
     if (!selectedSetId) return;
-    const wordSet = wordSets.find((ws) => ws.id === selectedSetId);
-    if (!wordSet) return;
-    onStart(wordSet, sourceLanguage, randomOrder);
+    const params = new URLSearchParams({
+      id: selectedSetId,
+      source: sourceLanguage,
+      random: randomOrder.toString(),
+    });
+    router.push(`/quiz?${params.toString()}`);
   }
 
   if (wordSets.length === 0) {

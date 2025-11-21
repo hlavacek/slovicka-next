@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { QuizResult } from "@/lib/quiz";
 
@@ -12,6 +13,17 @@ type QuizSummaryProps = {
 
 export default function QuizSummary({ result, onStartNew }: QuizSummaryProps) {
   const t = useTranslations("Quiz");
+  const router = useRouter();
+
+  function handleStartNew() {
+    // Use onStartNew prop if provided (for backward compatibility)
+    // Otherwise navigate to home
+    if (onStartNew) {
+      onStartNew();
+    } else {
+      router.push("/");
+    }
+  }
 
   return (
     <div className="w-full max-w-2xl rounded-md border bg-white p-6 shadow-sm">
@@ -51,7 +63,7 @@ export default function QuizSummary({ result, onStartNew }: QuizSummaryProps) {
         </div>
       </div>
 
-      <Button onClick={onStartNew}>{t("startNewQuizButton")}</Button>
+      <Button onClick={handleStartNew}>{t("startNewQuizButton")}</Button>
     </div>
   );
 }

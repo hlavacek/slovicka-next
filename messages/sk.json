@@ -27,6 +27,7 @@
     "backToQuizButton": "Späť na precvičovanie"
   },
   "Quiz": {
+    "loadingQuiz": "Načítavam precvičovanie...",
     "title": "Precvičovanie slovíčok",
     "selectWordSetLabel": "Vyberte zoznam slovíčok",
     "entriesCount": "{count, plural, =0 {# položiek} =1 {# položka} few {# položky} other {# položiek}}",

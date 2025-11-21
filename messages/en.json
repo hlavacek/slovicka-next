@@ -27,6 +27,7 @@
     "backToQuizButton": "Back to Quiz"
   },
   "Quiz": {
+    "loadingQuiz": "Loading quiz...",
     "title": "Practice Quiz",
     "instructions": "Select a word set and choose which language you want to practice from.",
     "selectWordSetLabel": "Select a word set",
