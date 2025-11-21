@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import React from "react"
-import { useTranslations } from "next-intl"
-import { Button } from "@/components/ui/button"
-import { QuizState } from "@/lib/quiz"
-import { speakWord } from "@/lib/speech"
+import React from "react";
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { QuizState } from "@/lib/quiz";
+import { speakWord } from "@/lib/speech";
 
 type QuizSessionProps = {
-  state: QuizState
-  onReveal: () => void
-  onMarkCorrect: () => void
-  onMarkIncorrect: () => void
-}
+  state: QuizState;
+  onReveal: () => void;
+  onMarkCorrect: () => void;
+  onMarkIncorrect: () => void;
+};
 
 export default function QuizSession({
   state,
@@ -19,18 +19,22 @@ export default function QuizSession({
   onMarkCorrect,
   onMarkIncorrect,
 }: QuizSessionProps) {
-  const t = useTranslations("Quiz")
-  const currentQuestion = state.questions[state.currentIndex]
-  const progress = `${state.currentIndex + 1} / ${state.questions.length}`
+  const t = useTranslations("Quiz");
+  const currentQuestion = state.questions[state.currentIndex];
+  const progress = `${state.currentIndex + 1} / ${state.questions.length}`;
 
   // Speak the target word when the answer is revealed
   React.useEffect(() => {
     if (currentQuestion.revealed) {
       // Determine target language (opposite of source language)
-      const targetLanguage = state.config.sourceLanguage === "sk" ? "en" : "sk"
-      speakWord(currentQuestion.targetWord, targetLanguage)
+      const targetLanguage = state.config.sourceLanguage === "sk" ? "en" : "sk";
+      speakWord(currentQuestion.targetWord, targetLanguage);
     }
-  }, [currentQuestion.revealed, currentQuestion.targetWord, state.config.sourceLanguage])
+  }, [
+    currentQuestion.revealed,
+    currentQuestion.targetWord,
+    state.config.sourceLanguage,
+  ]);
 
   return (
     <div className="w-full max-w-2xl rounded-md border bg-white p-6 shadow-sm">
@@ -44,7 +48,9 @@ export default function QuizSession({
             ? t("slovakLabel")
             : t("englishLabel")}
         </h2>
-        <div className="text-2xl font-semibold">{currentQuestion.sourceWord}</div>
+        <div className="text-2xl font-semibold">
+          {currentQuestion.sourceWord}
+        </div>
       </div>
 
       {currentQuestion.revealed && (
@@ -76,5 +82,5 @@ export default function QuizSession({
         )}
       </div>
     </div>
-  )
+  );
 }

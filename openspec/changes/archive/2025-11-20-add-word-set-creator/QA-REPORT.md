@@ -3,17 +3,20 @@
 ## 2.1 Accessibility Check
 
 ### Keyboard Navigation ✓
+
 - [x] All form fields are reachable via Tab/Shift+Tab
 - [x] Form inputs have proper labels (Set name, Slovak, English)
 - [x] Buttons are keyboard accessible
 - [x] No keyboard traps detected
 
 ### ARIA and Semantic HTML ✓
+
 - [x] Form uses semantic `<input>` and `<button>` elements
 - [x] Labels are properly associated with inputs
 - [x] Interactive elements are appropriately marked
 
 ### Notes
+
 - The component uses accessible UI primitives from `@/components/ui/button`
 - All text inputs include placeholder text for guidance
 - Error messages are displayed inline and clearly visible
@@ -21,6 +24,7 @@
 ## 2.2 Export/Import Round-trip Testing ✓
 
 ### Test Scenarios
+
 1. **Create and Export**
    - Created test word set "Animals" with 3 entries
    - Exported to JSON file
@@ -38,11 +42,13 @@
    - Attempted import with missing required fields → Error message displayed
 
 ### Results
+
 All export/import scenarios passed. Data integrity maintained through round-trip.
 
 ## 2.3 LocalStorage Persistence ✓
 
 ### Test Scenarios
+
 1. **Create and Save**
    - Created word set "Test Set 1"
    - Saved to localStorage
@@ -64,11 +70,13 @@ All export/import scenarios passed. Data integrity maintained through round-trip
    - Verified loading one set doesn't affect others
 
 ### Results
+
 localStorage persistence working correctly. Data survives page reloads and browser sessions.
 
 ## Summary
 
 All QA tasks completed successfully:
+
 - ✓ Keyboard navigation and accessibility verified
 - ✓ Export/import functionality tested with various scenarios
 - ✓ localStorage persistence confirmed across sessions

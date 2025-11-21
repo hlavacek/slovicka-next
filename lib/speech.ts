@@ -16,24 +16,23 @@ function getLocaleCode(language: "sk" | "en"): string {
  */
 function findVoiceForLanguage(
   language: "sk" | "en",
-  voices: SpeechSynthesisVoice[]
+  voices: SpeechSynthesisVoice[],
 ): SpeechSynthesisVoice | null {
   const localeCode = getLocaleCode(language);
   const languagePrefix = language;
   // First, try to find an exact locale match (e.g., "sk-SK")
   const exactMatchFemale = voices.find(
-    (voice) => voice.lang === localeCode && voice.name.match(/.*female.*/i)
+    (voice) => voice.lang === localeCode && voice.name.match(/.*female.*/i),
   );
   if (exactMatchFemale) return exactMatchFemale;
 
   // First, try to find an exact locale match (e.g., "sk-SK")
-  const exactMatch = voices.find(
-    (voice) => voice.lang === localeCode);
+  const exactMatch = voices.find((voice) => voice.lang === localeCode);
   if (exactMatch) return exactMatch;
 
   // Fall back to any voice that starts with the language code (e.g., "sk")
   const prefixMatch = voices.find((voice) =>
-    voice.lang.startsWith(languagePrefix)
+    voice.lang.startsWith(languagePrefix),
   );
   if (prefixMatch) return prefixMatch;
 

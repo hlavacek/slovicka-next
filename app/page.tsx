@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect, startTransition } from "react"
-import { WordSet, loadWordSets } from "@/lib/wordsets"
+import React, { useState, useEffect, startTransition } from "react";
+import { WordSet, loadWordSets } from "@/lib/wordsets";
 import {
   SourceLanguage,
   QuizState,
@@ -9,51 +9,51 @@ import {
   revealAnswer,
   recordAnswer,
   calculateScore,
-} from "@/lib/quiz"
-import QuizSetup from "@/components/quiz/QuizSetup"
-import QuizSession from "@/components/quiz/QuizSession"
-import QuizSummary from "@/components/quiz/QuizSummary"
+} from "@/lib/quiz";
+import QuizSetup from "@/components/quiz/QuizSetup";
+import QuizSession from "@/components/quiz/QuizSession";
+import QuizSummary from "@/components/quiz/QuizSummary";
 
-type QuizPhase = "setup" | "session" | "summary"
+type QuizPhase = "setup" | "session" | "summary";
 
 export default function Home() {
-  const [wordSets, setWordSets] = useState<WordSet[]>([])
-  const [phase, setPhase] = useState<QuizPhase>("setup")
-  const [quizState, setQuizState] = useState<QuizState | null>(null)
+  const [wordSets, setWordSets] = useState<WordSet[]>([]);
+  const [phase, setPhase] = useState<QuizPhase>("setup");
+  const [quizState, setQuizState] = useState<QuizState | null>(null);
 
   // Load word sets on client side to avoid hydration mismatch
   useEffect(() => {
-    const sets = loadWordSets()
+    const sets = loadWordSets();
     startTransition(() => {
-      setWordSets(sets)
-    })
-  }, [])
+      setWordSets(sets);
+    });
+  }, []);
 
   function handleStartQuiz(wordSet: WordSet, sourceLanguage: SourceLanguage) {
-    const initialState = initializeQuiz(wordSet, sourceLanguage)
-    setQuizState(initialState)
-    setPhase("session")
+    const initialState = initializeQuiz(wordSet, sourceLanguage);
+    setQuizState(initialState);
+    setPhase("session");
   }
 
   function handleReveal() {
-    if (!quizState) return
-    const newState = revealAnswer(quizState)
-    setQuizState(newState)
+    if (!quizState) return;
+    const newState = revealAnswer(quizState);
+    setQuizState(newState);
   }
 
   function handleMarkAnswer(isCorrect: boolean) {
-    if (!quizState) return
-    const newState = recordAnswer(quizState, isCorrect)
-    setQuizState(newState)
-    
+    if (!quizState) return;
+    const newState = recordAnswer(quizState, isCorrect);
+    setQuizState(newState);
+
     if (newState.completed) {
-      setPhase("summary")
+      setPhase("summary");
     }
   }
 
   function handleStartNew() {
-    setQuizState(null)
-    setPhase("setup")
+    setQuizState(null);
+    setPhase("setup");
   }
 
   return (
@@ -76,5 +76,5 @@ export default function Home() {
         />
       )}
     </div>
-  )
+  );
 }

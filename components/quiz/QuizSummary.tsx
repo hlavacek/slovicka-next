@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import React from "react"
-import { useTranslations } from "next-intl"
-import { Button } from "@/components/ui/button"
-import { QuizResult } from "@/lib/quiz"
+import React from "react";
+import { useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
+import { QuizResult } from "@/lib/quiz";
 
 type QuizSummaryProps = {
-  result: QuizResult
-  onStartNew: () => void
-}
+  result: QuizResult;
+  onStartNew: () => void;
+};
 
 export default function QuizSummary({ result, onStartNew }: QuizSummaryProps) {
-  const t = useTranslations("Quiz")
+  const t = useTranslations("Quiz");
 
   return (
     <div className="w-full max-w-2xl rounded-md border bg-white p-6 shadow-sm">
@@ -53,5 +53,5 @@ export default function QuizSummary({ result, onStartNew }: QuizSummaryProps) {
 
       <Button onClick={onStartNew}>{t("startNewQuizButton")}</Button>
     </div>
-  )
+  );
 }

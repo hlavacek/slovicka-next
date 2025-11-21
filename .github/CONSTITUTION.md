@@ -3,18 +3,21 @@
 This document captures the engineering principles and minimal rules for code quality, testing standards, user-experience consistency, and performance requirements for this repository.
 
 ### Short contract (inputs / outputs / success criteria)
+
 - Inputs: Pull requests that change code, tests, styles, configuration, or dependencies.
 - Outputs: An approved PR merged with CI green, tests passing, and relevant docs updated.
 - Error modes: Lint/typecheck failures, failing tests, accessibility regressions, severe performance regressions, or security vulnerabilities.
 - Success criteria: Code is readable, typed, covered by tests to an agreed threshold, accessible, consistent with UX tokens, and within performance budgets.
 
 ### High-level principles
+
 - Clarity over cleverness: prefer readable, well-named code.
 - Tests are required: new features and bugfixes must include tests.
 - UX consistency: reuse shared UI components and tokens.
 - Performance is measurable: use Next.js features and enforce budgets.
 
 ## Code quality rules
+
 - Follow ESLint and TypeScript rules. Fix all lint and type errors before merging.
 - Prefer explicit types; avoid `any` except with clear justification.
 - Keep components small and focused; split complex logic into hooks or `lib/` utilities.
@@ -27,6 +30,7 @@ This document captures the engineering principles and minimal rules for code qua
 Enforcement: CI must run lint and typecheck; a code review is required before merge.
 
 ## Testing standards
+
 - Test types:
   - Unit tests (Jest + React Testing Library) for logic and components.
   - Integration tests for coordinating modules.
@@ -40,6 +44,7 @@ Enforcement: CI must run lint and typecheck; a code review is required before me
 - CI: Run unit tests + coverage on every PR; fail on regressions below thresholds.
 
 ## User Experience consistency
+
 - Centralize design tokens (colors, spacing, typography) and use `components/ui/` shared components.
 - Component API conventions: `variant`, `size`, `disabled`, `className`.
 - Accessibility rules:
@@ -49,6 +54,7 @@ Enforcement: CI must run lint and typecheck; a code review is required before me
 - Microcopy should be consistent; validation errors must be helpful.
 
 ## Performance requirements and guidance
+
 - Suggested targets: Lighthouse Performance >= 90 (adjustable), LCP < 2.5s, CLS < 0.1.
 - Bundle budget: aim for initial critical JS < 150 KB gzipped; use dynamic imports and server components.
 - Use Next.js optimizations (Image, Script, ISR, server components) and aggressive caching for static content.
@@ -56,6 +62,7 @@ Enforcement: CI must run lint and typecheck; a code review is required before me
 - Monitor Web Vitals in production and alert on regressions.
 
 ## PR checklist (add to PR template)
+
 - [ ] Branch is up-to-date with base branch.
 - [ ] Lint and TypeScript checks pass.
 - [ ] Unit tests added/updated and passing; coverage not decreased below threshold.
@@ -67,12 +74,14 @@ Enforcement: CI must run lint and typecheck; a code review is required before me
 - [ ] At least one reviewer assigned.
 
 ## CI Quality gates
+
 - Build: must succeed.
 - Lint/Typecheck: must pass (no errors).
 - Tests: unit tests pass and coverage threshold met.
 - Lighthouse/Web Vitals: report metrics; fail on configured regressions.
 
 ## Edge cases & risks
+
 - Validate empty/null inputs and show helpful messages.
 - Handle slow/failed external services with timeouts, retries, and graceful fallbacks.
 - Large datasets: paginate or virtualize.
@@ -80,18 +89,20 @@ Enforcement: CI must run lint and typecheck; a code review is required before me
 - Use error boundaries for render-time exceptions.
 
 ## Monitoring & telemetry
+
 - Capture exceptions with context (e.g., Sentry).
 - Collect Web Vitals and alert on regressions.
 - Track anonymized usage metrics respecting user consent.
 
 ## Small examples / conventions
+
 - Preferred Button props example:
 
   ```ts
   interface ButtonProps {
     children: React.ReactNode;
-    variant?: 'primary' | 'secondary';
-    size?: 'sm' | 'md' | 'lg';
+    variant?: "primary" | "secondary";
+    size?: "sm" | "md" | "lg";
     disabled?: boolean;
     className?: string;
   }
@@ -103,6 +114,7 @@ Enforcement: CI must run lint and typecheck; a code review is required before me
   - `app/` — Next.js route components and global CSS
 
 ## Adoption
+
 - Place this file as `.github/CONSTITUTION.md` (this file).
 - Add the PR checklist to `.github/pull_request_template.md` and configure CI to run lint/typecheck/tests and a Lighthouse smoke job.
 

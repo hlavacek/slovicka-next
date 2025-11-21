@@ -4,12 +4,15 @@ about: Describe the change and why it is needed.
 ---
 
 ## Summary
+
 Provide a short description of the change and the rationale.
 
 ## Related issues
+
 Link any related issues, tasks, or discussions.
 
 ## Checklist
+
 - [ ] Branch is up-to-date with the base branch.
 - [ ] Linting and TypeScript checks pass locally.
 - [ ] Unit tests added/updated and passing; coverage has not decreased below thresholds.
@@ -21,7 +24,9 @@ Link any related issues, tasks, or discussions.
 - [ ] Reviewer(s) assigned (include special reviewers if needed: security, infra).
 
 ## How to test
+
 Describe steps to reproduce and verify the change locally (commands, env, test data).
 
 ## Notes for reviewers
+
 Mention any non-obvious design decisions, trade-offs, or areas needing extra attention.

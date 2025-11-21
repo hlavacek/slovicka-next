@@ -52,6 +52,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 ### Keyboard Navigation
 
 All form fields and buttons are accessible via keyboard:
+
 - Use `Tab` to move forward through fields
 - Use `Shift+Tab` to move backward
 - Use `Enter` to submit forms or activate buttons

@@ -1,12 +1,17 @@
 # learning Specification
 
 ## Purpose
+
 TBD - created by archiving change add-word-set-creator. Update Purpose after archive.
+
 ## Requirements
+
 ### Requirement: Word Set Creation
+
 The system SHALL provide a user interface for creating custom vocabulary word sets containing Slovak ↔ English word pairs with navigation back to the quiz page.
 
 #### Scenario: User creates a new word set
+
 - **GIVEN** a user navigates to the word set creation page
 - **WHEN** they enter a name and at least one Slovak ↔ English word pair
 - **AND** they submit the form
@@ -14,26 +19,31 @@ The system SHALL provide a user interface for creating custom vocabulary word se
 - **AND** displays a success confirmation
 
 #### Scenario: Validation prevents invalid submissions
+
 - **GIVEN** a user is creating a word set
 - **WHEN** they attempt to submit with an empty name or missing translations
 - **THEN** the system displays inline validation errors
 - **AND** prevents submission until all fields are valid
 
 #### Scenario: User navigates back to quiz from word set page
+
 - **GIVEN** a user is on the word set creation page
 - **WHEN** they view the page
 - **THEN** the system displays a button to navigate to the quiz page
 - **AND** clicking the button navigates to `/`
 
 ### Requirement: Word Set Persistence
+
 The system SHALL persist created word sets in browser localStorage for offline access and cross-session availability, with the ability to delete unwanted word sets.
 
 #### Scenario: Word sets persist across sessions
+
 - **GIVEN** a user has created and saved word sets
 - **WHEN** they close and reopen the browser
 - **THEN** previously saved word sets remain available
 
 #### Scenario: User deletes a word set
+
 - **GIVEN** a user has saved word sets displayed in the word set form
 - **WHEN** they click the delete button for a specific word set
 - **THEN** the system removes the word set from localStorage
@@ -41,20 +51,24 @@ The system SHALL persist created word sets in browser localStorage for offline a
 - **AND** the word set no longer appears in the quiz setup page
 
 #### Scenario: User confirms deletion
+
 - **GIVEN** a user clicks the delete button for a word set
 - **WHEN** a confirmation prompt appears
 - **AND** the user confirms the deletion
 - **THEN** the word set is permanently removed
 
 ### Requirement: Import and Export
+
 The system SHALL allow users to export word sets as JSON files and import previously exported files.
 
 #### Scenario: User exports a word set
+
 - **GIVEN** a user has created a word set
 - **WHEN** they click export
 - **THEN** the system downloads a JSON file containing the word set data
 
 #### Scenario: User imports a word set
+
 - **GIVEN** a user has a previously exported JSON file
 - **WHEN** they upload the file via the import function
 - **THEN** the system validates the file structure
@@ -62,18 +76,22 @@ The system SHALL allow users to export word sets as JSON files and import previo
 - **AND** handles duplicate IDs appropriately
 
 ### Requirement: Accessibility
+
 The system SHALL ensure the word set creation form is keyboard accessible and follows WCAG guidelines.
 
 #### Scenario: Keyboard-only navigation
+
 - **GIVEN** a user navigates with keyboard only
 - **WHEN** they use Tab/Shift+Tab to navigate form fields
 - **THEN** all interactive elements are reachable
 - **AND** form labels and ARIA attributes are properly associated
 
 ### Requirement: Internationalization
+
 The system SHALL use next-intl for all user-facing text to support multiple languages (Slovak, English) with Slovak as the default locale.
 
 #### Scenario: UI text is translatable
+
 - **GIVEN** the application is configured with next-intl
 - **WHEN** a user views any page without explicitly selecting a language
 - **THEN** the interface displays in Slovak by default
@@ -81,15 +99,18 @@ The system SHALL use next-intl for all user-facing text to support multiple lang
 - **AND** the interface can adapt to other supported locales when configured
 
 #### Scenario: HTML lang attribute matches default locale
+
 - **GIVEN** the application loads with default settings
 - **WHEN** the page is rendered
 - **THEN** the HTML lang attribute is set to "sk"
 - **AND** screen readers and browsers correctly identify the content language
 
 ### Requirement: Quiz Setup Interface
+
 The system SHALL provide a quiz setup interface where users can select a word set and choose the source language for practice, with persistent access to create new word sets.
 
 #### Scenario: User selects word set and source language
+
 - **GIVEN** a user has at least one saved word set
 - **WHEN** they navigate to `/`
 - **THEN** the system displays a list of available word sets
@@ -98,21 +119,25 @@ The system SHALL provide a quiz setup interface where users can select a word se
 - **AND** displays a link to create new word sets
 
 #### Scenario: No word sets available
+
 - **GIVEN** a user has no saved word sets
 - **WHEN** they navigate to `/`
 - **THEN** the system displays a message indicating no word sets are available
 - **AND** provides a link to the word set creation page
 
 #### Scenario: User navigates to create word sets from quiz setup
+
 - **GIVEN** a user is on the quiz setup page
 - **WHEN** they click the create word set link
 - **THEN** the system navigates to `/word-sets/new`
 - **AND** the user can create a new word set
 
 ### Requirement: Sequential Quiz Flow
+
 The system SHALL present words from the selected word set one at a time in sequential order, allowing users to self-assess their knowledge, with automatic pronunciation of the target word when revealed.
 
 #### Scenario: User reveals answer with pronunciation
+
 - **GIVEN** a user is viewing a quiz question
 - **WHEN** they click the "Show Answer" button
 - **THEN** the system reveals the target language translation
@@ -122,6 +147,7 @@ The system SHALL present words from the selected word set one at a time in seque
 - **AND** hides the "Show Answer" button
 
 #### Scenario: Speech synthesis gracefully degrades
+
 - **GIVEN** a user is taking a quiz in a browser without speech synthesis support
 - **WHEN** they reveal an answer
 - **THEN** the system displays the target word normally
@@ -129,6 +155,7 @@ The system SHALL present words from the selected word set one at a time in seque
 - **AND** the quiz continues to function without audio
 
 #### Scenario: Speech uses correct language voice
+
 - **GIVEN** a user is practicing from Slovak to English
 - **WHEN** they reveal an answer
 - **THEN** the system speaks the English word using an English voice
@@ -138,15 +165,18 @@ The system SHALL present words from the selected word set one at a time in seque
 - **THEN** the system speaks the Slovak word using a Slovak voice
 
 #### Scenario: Speech does not block quiz progression
+
 - **GIVEN** a user has revealed an answer and speech is playing
 - **WHEN** they click "Mark Correct" or "Mark Incorrect"
 - **THEN** the system immediately advances to the next question
 - **AND** does not wait for speech to finish
 
 ### Requirement: Quiz Results Summary
+
 The system SHALL display a summary of quiz results after all words have been reviewed, showing performance statistics.
 
 #### Scenario: Quiz completion shows summary
+
 - **GIVEN** a user has completed reviewing all words in a quiz
 - **WHEN** they mark the final word as correct or incorrect
 - **THEN** the system displays a summary screen
@@ -157,9 +187,11 @@ The system SHALL display a summary of quiz results after all words have been rev
 - **AND** provides a "Start New Quiz" button
 
 ### Requirement: Quiz Session State
+
 The system SHALL maintain quiz session state in memory and reset when a new quiz is started or the page is reloaded.
 
 #### Scenario: In-progress quiz state is maintained
+
 - **GIVEN** a user is in the middle of a quiz session
 - **WHEN** they answer questions sequentially
 - **THEN** the system maintains which words have been answered
@@ -167,15 +199,18 @@ The system SHALL maintain quiz session state in memory and reset when a new quiz
 - **AND** preserves the current position in the sequence
 
 #### Scenario: Page reload resets quiz
+
 - **GIVEN** a user is in the middle of a quiz session
 - **WHEN** they reload the page
 - **THEN** the system returns to the quiz setup screen
 - **AND** does not persist the partial session
 
 ### Requirement: Quiz Accessibility
+
 The system SHALL ensure the quiz interface is keyboard accessible and provides clear focus indicators for navigation.
 
 #### Scenario: Keyboard navigation in quiz
+
 - **GIVEN** a user is taking a quiz using keyboard only
 - **WHEN** they use Tab to navigate
 - **THEN** all interactive elements (Show Answer, Mark Correct, Mark Incorrect, Next buttons) are reachable
@@ -183,11 +218,12 @@ The system SHALL ensure the quiz interface is keyboard accessible and provides c
 - **AND** focus indicators are clearly visible
 
 ### Requirement: Quiz Internationalization
+
 The system SHALL use next-intl for all quiz-related UI text to support multiple languages.
 
 #### Scenario: Quiz UI text is translatable
+
 - **GIVEN** the quiz interface is displayed
 - **WHEN** a user views any quiz screen
 - **THEN** all labels, buttons, messages, and instructions use translation keys
 - **AND** the interface adapts to the selected locale (Slovak, English)
-

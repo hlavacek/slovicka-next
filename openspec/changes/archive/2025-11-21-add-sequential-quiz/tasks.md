@@ -1,10 +1,12 @@
 ## 1. Create Quiz Utilities
+
 - [x] 1.1 Create `lib/quiz.ts` with types: `QuizConfig`, `QuizState`, `QuizResult`
 - [x] 1.2 Implement `initializeQuiz(wordSet, sourceLanguage)` to create initial state
 - [x] 1.3 Implement `recordAnswer(state, isCorrect)` to update state with answer result
 - [x] 1.4 Implement `calculateScore(results)` to compute summary statistics
 
 ## 2. Create Quiz Components
+
 - [x] 2.1 Create `components/quiz/QuizSetup.tsx` for word set and language selection
   - [x] 2.1.1 Load available word sets using `loadWordSets()`
   - [x] 2.1.2 Display list of word sets with radio buttons or cards
@@ -24,6 +26,7 @@
   - [x] 2.3.3 Add "Start New Quiz" button to return to setup
 
 ## 3. Create Quiz Page
+
 - [x] 3.1 Create `app/quiz/page.tsx` as main quiz route
 - [x] 3.2 Manage quiz state (setup, in-progress, completed)
 - [x] 3.3 Conditionally render QuizSetup, QuizSession, or QuizSummary based on state
@@ -31,6 +34,7 @@
 - [x] 3.5 Load word sets in useEffect to avoid hydration errors
 
 ## 4. Add Internationalization
+
 - [x] 4.1 Add quiz translation keys to `messages/en.json`:
   - [x] 4.1.1 Setup screen: title, instructions, sourceLanguageLabel, startButton, noWordSets, createWordSetLink
   - [x] 4.1.2 Session screen: showAnswerButton, markCorrectButton, markIncorrectButton, progressLabel
@@ -39,6 +43,7 @@
 - [x] 4.3 Use `useTranslations("Quiz")` in all quiz components
 
 ## 5. Styling and Accessibility
+
 - [x] 5.1 Apply consistent Tailwind classes matching existing design system
 - [x] 5.2 Ensure all buttons have appropriate variants (primary, outline, ghost)
 - [x] 5.3 Add keyboard accessibility (Tab navigation, Enter/Space activation)
@@ -47,6 +52,7 @@
 - [x] 5.6 Add ARIA labels where needed for screen readers
 
 ## 6. Testing and Validation
+
 - [x] 6.1 Manual test: Navigate to `/quiz` with no saved word sets
 - [x] 6.2 Manual test: Create a word set, start quiz with SK→EN
 - [x] 6.3 Manual test: Start quiz with EN→SK
@@ -58,5 +64,6 @@
 - [x] 6.9 Verify no ESLint errors with `npm run lint`
 
 ## 7. Documentation
+
 - [ ] 7.1 Add navigation link to quiz page in main layout or home page (optional, if requested)
 - [ ] 7.2 Update README.md with quiz feature description (optional, if requested)
