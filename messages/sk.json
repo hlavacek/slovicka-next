@@ -22,5 +22,27 @@
     "errorEmptyName": "Prosím zadajte názov súboru slovíčok",
     "errorEmptyEntries": "Prosím zadajte aspoň jednu položku",
     "errorMissingFields": "Všetky riadky musia obsahovať slovenské aj anglické slovo"
+  },
+  "Quiz": {
+    "title": "Precvičovanie slovíčok",
+    "instructions": "Vyberte si súbor slovíčok a jazyk, z ktorého chcete precvičovať.",
+    "selectWordSetLabel": "Vyberte súbor slovíčok",
+    "entriesLabel": "položiek",
+    "sourceLanguageLabel": "Precvičovať z",
+    "slovakLabel": "Slovenčina",
+    "englishLabel": "Angličtina",
+    "startButton": "Začať precvičovanie",
+    "noWordSets": "Nemáte ešte žiadne súbory slovíčok.",
+    "createWordSetLink": "Vytvoriť prvý súbor slovíčok",
+    "progressLabel": "Postup",
+    "showAnswerButton": "Zobraziť odpoveď",
+    "markCorrectButton": "Vedel/a som",
+    "markIncorrectButton": "Nevedel/a som",
+    "summaryTitle": "Precvičovanie dokončené!",
+    "totalWords": "Celkom slovíčok",
+    "correctCount": "Správne",
+    "incorrectCount": "Nesprávne",
+    "scoreLabel": "Skóre",
+    "startNewQuizButton": "Nové precvičovanie"
   }
 }

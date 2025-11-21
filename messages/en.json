@@ -22,5 +22,27 @@
     "errorEmptyName": "Please provide a name for the word set",
     "errorEmptyEntries": "Please provide at least one entry",
     "errorMissingFields": "All rows must have both Slovak and English entries"
+  },
+  "Quiz": {
+    "title": "Practice Quiz",
+    "instructions": "Select a word set and choose which language you want to practice from.",
+    "selectWordSetLabel": "Select a word set",
+    "entriesLabel": "entries",
+    "sourceLanguageLabel": "Practice from",
+    "slovakLabel": "Slovak",
+    "englishLabel": "English",
+    "startButton": "Start Quiz",
+    "noWordSets": "You don't have any word sets yet.",
+    "createWordSetLink": "Create your first word set",
+    "progressLabel": "Progress",
+    "showAnswerButton": "Show Answer",
+    "markCorrectButton": "Mark Correct",
+    "markIncorrectButton": "Mark Incorrect",
+    "summaryTitle": "Quiz Complete!",
+    "totalWords": "Total Words",
+    "correctCount": "Correct",
+    "incorrectCount": "Incorrect",
+    "scoreLabel": "Score",
+    "startNewQuizButton": "Start New Quiz"
   }
 }

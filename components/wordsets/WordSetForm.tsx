@@ -26,8 +26,14 @@ export default function WordSetForm({ className }: { className?: string }) {
   const t = useTranslations("WordSets")
   const [name, setName] = useState("")
   const [rows, setRows] = useState<Row[]>([{ id: genId(), sk: "", en: "" }])
-  const [savedSets, setSavedSets] = useState<WordSet[]>(() => loadWordSets())
+  const [savedSets, setSavedSets] = useState<WordSet[]>([])
   const [error, setError] = useState<string | null>(null)
+  const fileInputRef = React.useRef<HTMLInputElement>(null)
+
+  // Load saved sets on client side only to avoid hydration mismatch
+  React.useEffect(() => {
+    setSavedSets(loadWordSets())
+  }, [])
 
   function updateRow(id: string, field: keyof WordPair, value: string) {
     setRows((r) => r.map((row) => (row.id === id ? { ...row, [field]: value } : row)))
@@ -88,6 +94,12 @@ export default function WordSetForm({ className }: { className?: string }) {
       }
     }
     reader.readAsText(f)
+    // Reset input value to allow importing the same file again
+    e.target.value = ""
+  }
+
+  function triggerImport() {
+    fileInputRef.current?.click()
   }
 
   function loadSet(set: WordSet) {
@@ -142,10 +154,16 @@ export default function WordSetForm({ className }: { className?: string }) {
 
       <div className="mb-4 flex gap-2">
         <Button onClick={onSave}>{t("saveButton")}</Button>
-        <label className="flex items-center gap-2">
-          <input type="file" accept="application/json" onChange={onImport} className="hidden" />
-          <Button variant="outline" type="button">{t("importButton")}</Button>
-        </label>
+        <input 
+          ref={fileInputRef}
+          type="file" 
+          accept="application/json" 
+          onChange={onImport} 
+          className="hidden" 
+        />
+        <Button variant="outline" type="button" onClick={triggerImport}>
+          {t("importButton")}
+        </Button>
       </div>
 
       <div className="mt-6">
