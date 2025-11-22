@@ -96,7 +96,7 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
             <label
               key={ws.id}
               className={cn(
-                "flex cursor-pointer items-center gap-3 rounded-md border p-3 transition-colors hover:bg-zinc-50",
+                "flex cursor-pointer flex-wrap items-center gap-3 rounded-md border p-3 transition-colors hover:bg-zinc-50",
                 selectedSetId === ws.id && "border-zinc-900 bg-zinc-100",
               )}
             >
@@ -108,7 +108,7 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
                 onChange={(e) => setSelectedSetId(e.target.value)}
                 className="h-4 w-4"
               />
-              <div>
+              <div className="flex-1">
                 <div className="font-medium">{ws.name}</div>
                 <div className="text-sm text-zinc-500">
                   {t("entriesCount", { count: ws.entries.length })}

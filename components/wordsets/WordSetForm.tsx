@@ -205,16 +205,16 @@ export default function WordSetForm({ className }: { className?: string }) {
           {savedSets.map((s) => (
             <div
               key={s.id}
-              className="flex items-center justify-between gap-2 rounded-md border px-3 py-2"
+              className="flex flex-wrap items-center gap-2 rounded-md border px-3 py-2"
             >
-              <div>
-                <div className="font-medium">{s.name}</div>
-                <div className="text-sm text-zinc-500">
+              <div className="flex-1">
+                <div className="font-medium whitespace-nowrap">{s.name}</div>
+                <div className="text-sm text-zinc-500 whitespace-nowrap">
                   {t("entriesCount", { count: s.entries.length })}
                 </div>
               </div>
-              <div className="flex gap-2">
-                <Button variant="ghost" onClick={() => loadSet(s)} size="sm">
+              <div className="flex gap-2 flex-wrap">
+                <Button variant="outline" onClick={() => loadSet(s)} size="sm">
                   {t("loadButton")}
                 </Button>
                 <Button variant="outline" onClick={() => onExport(s)} size="sm">
