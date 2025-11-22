@@ -97,7 +97,7 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
               key={ws.id}
               className={cn(
                 "flex cursor-pointer items-center gap-3 rounded-md border p-3 transition-colors hover:bg-zinc-50",
-                selectedSetId === ws.id && "border-blue-500 bg-blue-50",
+                selectedSetId === ws.id && "border-zinc-900 bg-zinc-100",
               )}
             >
               <input

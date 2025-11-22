@@ -1,4 +1,11 @@
 {
+  "Metadata": {
+    "appName": "Slovíčka",
+    "appDescription": "Učte sa slovenské a anglické slovíčka pomocou interaktívnych kvízov pre deti a študentov",
+    "homeTitle": "Výber precvičovania",
+    "quizTitle": "Precvičovanie",
+    "wordSetsTitle": "Vytvoriť zoznam slovíčok"
+  },
   "HomePage": {
     "title": "Ahoj svet!"
   },

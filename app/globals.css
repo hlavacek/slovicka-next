@@ -119,4 +119,13 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Radio buttons - use black accent instead of blue */
+  input[type="radio"] {
+    accent-color: oklch(0.145 0 0); /* black/zinc-900 */
+  }
+
+  input[type="radio"]:checked {
+    accent-color: oklch(0.145 0 0); /* black/zinc-900 */
+  }
 }

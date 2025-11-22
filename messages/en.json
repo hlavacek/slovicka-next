@@ -1,4 +1,11 @@
 {
+  "Metadata": {
+    "appName": "Slovíčka",
+    "appDescription": "Learn Slovak and English vocabulary with interactive quizzes designed for children and students",
+    "homeTitle": "Quiz Setup",
+    "quizTitle": "Quiz Session",
+    "wordSetsTitle": "Create Word Set"
+  },
   "HomePage": {
     "title": "Hello world!"
   },
