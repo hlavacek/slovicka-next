@@ -170,10 +170,10 @@ export default function WordSetForm({ className }: { className?: string }) {
               <Button
                 variant="outline"
                 onClick={() => removeRow(row.id)}
-                size="sm"
+                size="icon-lg"
                 aria-label={t("removeButton")}
               >
-                <X className="h-4 w-4" />
+                <X className="h-10 w-10" />
               </Button>
             </div>
           ))}
