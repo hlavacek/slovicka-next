@@ -12,15 +12,23 @@ import { Switch } from "@/components/ui/switch";
 
 type QuizSetupProps = {
   wordSets: WordSet[];
+  preselectedId?: string;
 };
 
-export default function QuizSetup({ wordSets }: QuizSetupProps) {
+export default function QuizSetup({ wordSets, preselectedId }: QuizSetupProps) {
   const t = useTranslations("Quiz");
   const router = useRouter();
   const [selectedSetId, setSelectedSetId] = useState<string | null>(null);
   const [sourceLanguage, setSourceLanguage] = useState<SourceLanguage>("sk");
   const [randomOrder, setRandomOrder] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
+
+  // Initialize selection with preselectedId if valid
+  React.useEffect(() => {
+    if (preselectedId && wordSets.some((ws) => ws.id === preselectedId)) {
+      setSelectedSetId(preselectedId);
+    }
+  }, [preselectedId, wordSets]);
 
   // Filter and sort word sets
   const filteredWordSets = React.useMemo(() => {
@@ -33,13 +41,20 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
       );
     }
 
-    // Sort by ID when no search term
+    // Sort by ID when no search term, but show preselected first
     if (!searchTerm.trim()) {
-      filtered = [...filtered].sort((a, b) => a.id.localeCompare(b.id));
+      filtered = [...filtered].sort((a, b) => {
+        // If preselectedId exists and matches one of the items, put it first
+        if (preselectedId) {
+          if (a.id === preselectedId) return -1;
+          if (b.id === preselectedId) return 1;
+        }
+        return a.id.localeCompare(b.id);
+      });
     }
 
     return filtered;
-  }, [wordSets, searchTerm]);
+  }, [wordSets, searchTerm, preselectedId]);
 
   const canStart = selectedSetId !== null;
 

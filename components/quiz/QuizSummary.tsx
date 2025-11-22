@@ -8,21 +8,16 @@ import { QuizResult } from "@/lib/quiz";
 
 type QuizSummaryProps = {
   result: QuizResult;
-  onStartNew: () => void;
+  wordSetId?: string;
 };
 
-export default function QuizSummary({ result, onStartNew }: QuizSummaryProps) {
+export default function QuizSummary({ result, wordSetId }: QuizSummaryProps) {
   const t = useTranslations("Quiz");
   const router = useRouter();
 
   function handleStartNew() {
-    // Use onStartNew prop if provided (for backward compatibility)
-    // Otherwise navigate to home
-    if (onStartNew) {
-      onStartNew();
-    } else {
-      router.push("/");
-    }
+    const url = wordSetId ? `/?wordset=${wordSetId}` : "/";
+    router.push(url);
   }
 
   return (

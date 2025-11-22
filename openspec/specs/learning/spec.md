@@ -3,7 +3,9 @@
 ## Purpose
 
 TBD - created by archiving change add-word-set-creator. Update Purpose after archive.
+
 ## Requirements
+
 ### Requirement: Word Set Creation
 
 The system SHALL provide a user interface for creating custom vocabulary word sets containing Slovak ↔ English word pairs with navigation back to the quiz page. Interactive buttons SHALL include visual icons to enhance usability while maintaining accessibility. **The system SHALL allow users to update existing word sets by loading them into the form and saving changes, preserving the original word set ID.** **The system SHALL provide a search input to filter saved word sets by name and display a scrollable list showing a maximum of 3 saved word sets at a time.**
@@ -314,7 +316,7 @@ The system SHALL present words from the selected word set one at a time, either 
 
 ### Requirement: Quiz Results Summary
 
-The system SHALL display a summary of quiz results after all words have been reviewed, showing performance statistics. The summary SHALL provide a button to return to the quiz setup page.
+The system SHALL display a summary of quiz results after all words have been reviewed, showing performance statistics. **The summary SHALL provide a button to return to the quiz setup page with the current word set pre-selected.**
 
 #### Scenario: Quiz completion shows summary
 
@@ -327,12 +329,13 @@ The system SHALL display a summary of quiz results after all words have been rev
 - **AND** calculates and displays a percentage score
 - **AND** provides a "Start New Quiz" button
 
-#### Scenario: User returns to setup from summary
+#### Scenario: User returns to setup from summary with word set ID
 
-- **GIVEN** a user is viewing the quiz summary on `/quiz`
+- **GIVEN** a user is viewing the quiz summary on `/quiz` for a specific word set
 - **WHEN** they click "Start New Quiz"
-- **THEN** the system navigates to `/` (home/setup page)
-- **AND** the user can select a new word set and configuration
+- **THEN** the system navigates to `/?wordset=<id>` with the current word set ID
+- **AND** the quiz setup page pre-selects the same word set
+- **AND** the user can modify configuration or select a different word set
 
 ### Requirement: Quiz Session State
 
@@ -463,4 +466,3 @@ The system SHALL provide meaningful, context-specific page titles and meta descr
 - **THEN** the page provides a meaningful meta description
 - **AND** the description accurately describes the application's purpose
 - **AND** the title follows best practices for SEO (descriptive, unique per page)
-

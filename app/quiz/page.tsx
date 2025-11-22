@@ -53,6 +53,8 @@ function QuizPageContent() {
     return initializeQuiz(wordSet, source, random);
   }, [searchParams]);
 
+  const wordSetId = searchParams.get("id");
+
   // Redirect if invalid parameters, or initialize quiz state
   useEffect(() => {
     if (initialQuizState === null) {
@@ -80,10 +82,6 @@ function QuizPageContent() {
     }
   }
 
-  function handleStartNew() {
-    router.push("/");
-  }
-
   // Loading state
   if (!quizState) {
     return (
@@ -108,7 +106,7 @@ function QuizPageContent() {
       {phase === "summary" && (
         <QuizSummary
           result={calculateScore(quizState)}
-          onStartNew={handleStartNew}
+          wordSetId={wordSetId || undefined}
         />
       )}
     </div>
