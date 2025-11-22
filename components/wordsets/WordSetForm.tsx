@@ -195,6 +195,7 @@ export default function WordSetForm({ className }: { className?: string }) {
                 onClick={() => removeRow(row.id)}
                 size="icon-lg"
                 aria-label={t("removeButton")}
+                disabled={rows.length === 1}
               >
                 <X className="h-10 w-10" />
               </Button>
