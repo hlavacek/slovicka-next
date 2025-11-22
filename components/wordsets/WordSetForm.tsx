@@ -38,6 +38,7 @@ export default function WordSetForm({ className }: { className?: string }) {
   const [rows, setRows] = useState<Row[]>([{ id: genId(), sk: "", en: "" }]);
   const [savedSets, setSavedSets] = useState<WordSet[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [editingSetId, setEditingSetId] = useState<string | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   // Load saved sets on client side only to avoid hydration mismatch
@@ -73,7 +74,7 @@ export default function WordSetForm({ className }: { className?: string }) {
   function onSave() {
     if (!validate()) return;
     const set: WordSet = {
-      id: `ws-${Date.now()}`,
+      id: editingSetId || `ws-${Date.now()}`,
       name: name.trim(),
       entries: rows.map((r) => ({ sk: r.sk.trim(), en: r.en.trim() })),
       createdAt: new Date().toISOString(),
@@ -82,6 +83,7 @@ export default function WordSetForm({ className }: { className?: string }) {
     setSavedSets(loadWordSets());
     setName("");
     setRows([{ id: genId(), sk: "", en: "" }]);
+    setEditingSetId(null);
   }
 
   function onExport(set: WordSet) {
@@ -117,6 +119,7 @@ export default function WordSetForm({ className }: { className?: string }) {
   function loadSet(set: WordSet) {
     setName(set.name);
     setRows(set.entries.map((e) => ({ id: genId(), ...e })));
+    setEditingSetId(set.id);
   }
 
   function onDelete(set: WordSet) {

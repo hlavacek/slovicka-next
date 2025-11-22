@@ -6,7 +6,7 @@ TBD - created by archiving change add-word-set-creator. Update Purpose after arc
 ## Requirements
 ### Requirement: Word Set Creation
 
-The system SHALL provide a user interface for creating custom vocabulary word sets containing Slovak ↔ English word pairs with navigation back to the quiz page. Interactive buttons SHALL include visual icons to enhance usability while maintaining accessibility.
+The system SHALL provide a user interface for creating custom vocabulary word sets containing Slovak ↔ English word pairs with navigation back to the quiz page. Interactive buttons SHALL include visual icons to enhance usability while maintaining accessibility. **The system SHALL allow users to update existing word sets by loading them into the form and saving changes, preserving the original word set ID.**
 
 #### Scenario: User creates a new word set
 
@@ -45,6 +45,33 @@ The system SHALL provide a user interface for creating custom vocabulary word se
 - **THEN** the system displays an X or delete icon alongside or within the button
 - **AND** the button remains accessible via keyboard and screen readers
 - **AND** clicking the button removes the corresponding word pair row
+
+#### Scenario: User loads existing word set for editing
+
+- **GIVEN** a user has saved word sets displayed in the word set form
+- **WHEN** they click the "Load" button for a specific word set
+- **THEN** the system populates the form with the word set's name and entries
+- **AND** tracks the loaded word set's ID internally
+- **AND** the form remains in editing mode for that word set
+
+#### Scenario: User updates loaded word set
+
+- **GIVEN** a user has loaded an existing word set into the form
+- **WHEN** they modify the name or entries
+- **AND** click "Save"
+- **THEN** the system updates the existing word set in localStorage
+- **AND** preserves the original word set ID
+- **AND** updates the modified timestamp
+- **AND** does NOT create a duplicate word set with a new ID
+
+#### Scenario: User creates new word set after loading
+
+- **GIVEN** a user has loaded an existing word set into the form
+- **WHEN** they clear or reset the form (implementation-specific: could be manual clear or automatic)
+- **AND** enter new word set data
+- **AND** click "Save"
+- **THEN** the system creates a new word set with a new ID
+- **AND** does NOT modify the previously loaded word set
 
 ### Requirement: Word Set Persistence
 
@@ -157,7 +184,7 @@ The system SHALL provide a quiz setup interface where users can select a word se
 
 ### Requirement: Sequential Quiz Flow
 
-The system SHALL present words from the selected word set one at a time, either in sequential or randomized order based on user preference, allowing users to self-assess their knowledge.
+The system SHALL present words from the selected word set one at a time, either in sequential or randomized order based on user preference, allowing users to self-assess their knowledge. **The system SHALL display quiz progress using a visual progress bar component alongside a text label for accessibility.**
 
 #### Scenario: Quiz session uses sequential order by default
 
@@ -182,6 +209,23 @@ The system SHALL present words from the selected word set one at a time, either 
 - **THEN** all quiz features work identically to sequential order
 - **AND** progress tracking remains accurate
 - **AND** the final summary shows correct results
+
+#### Scenario: Quiz displays visual progress bar
+
+- **GIVEN** a user is taking a quiz
+- **WHEN** they view the quiz interface
+- **THEN** the system displays a visual progress bar showing percentage completion
+- **AND** displays text indicating current question number and total (e.g., "1 / 10")
+- **AND** the progress bar visually fills proportionally to quiz completion
+- **AND** the progress bar updates immediately when advancing to the next question
+
+#### Scenario: Progress bar is accessible
+
+- **GIVEN** a user is taking a quiz
+- **WHEN** they use a screen reader or keyboard-only navigation
+- **THEN** the progress information is announced or available as text
+- **AND** the progress bar does not interfere with keyboard navigation
+- **AND** the progress label remains readable and understandable without visual cues
 
 ### Requirement: Quiz Results Summary
 

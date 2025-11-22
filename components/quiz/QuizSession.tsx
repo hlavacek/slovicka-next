@@ -3,6 +3,7 @@
 import React from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { QuizState } from "@/lib/quiz";
 import { speakWord } from "@/lib/speech";
 
@@ -22,6 +23,8 @@ export default function QuizSession({
   const t = useTranslations("Quiz");
   const currentQuestion = state.questions[state.currentIndex];
   const progress = `${state.currentIndex + 1} / ${state.questions.length}`;
+  const progressPercentage =
+    ((state.currentIndex + 1) / state.questions.length) * 100;
 
   // Speak the target word when the answer is revealed
   React.useEffect(() => {
@@ -38,8 +41,12 @@ export default function QuizSession({
 
   return (
     <div className="w-full max-w-2xl rounded-md border bg-white p-6 shadow-sm">
-      <div className="mb-4 text-sm text-zinc-500">
-        {t("progressLabel")}: {progress}
+      <div className="mb-4">
+        <Progress
+          value={progressPercentage}
+          aria-label={`${t("progressLabel")}: ${progress}`}
+          className="h-2"
+        />
       </div>
 
       <div className="mb-8">
