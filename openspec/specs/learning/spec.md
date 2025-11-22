@@ -8,7 +8,7 @@ TBD - created by archiving change add-word-set-creator. Update Purpose after arc
 
 ### Requirement: Word Set Creation
 
-The system SHALL provide a user interface for creating custom vocabulary word sets containing Slovak ↔ English word pairs with navigation back to the quiz page.
+The system SHALL provide a user interface for creating custom vocabulary word sets containing Slovak ↔ English word pairs with navigation back to the quiz page. Interactive buttons SHALL include visual icons to enhance usability while maintaining accessibility.
 
 #### Scenario: User creates a new word set
 
@@ -31,6 +31,22 @@ The system SHALL provide a user interface for creating custom vocabulary word se
 - **WHEN** they view the page
 - **THEN** the system displays a button to navigate to the quiz page
 - **AND** clicking the button navigates to `/`
+
+#### Scenario: User adds word pair rows with icon button
+
+- **GIVEN** a user is creating a word set
+- **WHEN** they view the "Add row" button
+- **THEN** the system displays a Plus icon alongside or within the button
+- **AND** the button remains accessible via keyboard and screen readers
+- **AND** clicking the button adds a new empty row for word pair entry
+
+#### Scenario: User removes word pair rows with icon button
+
+- **GIVEN** a user has multiple word pair rows in the form
+- **WHEN** they view the "Remove" button for a row
+- **THEN** the system displays an X or delete icon alongside or within the button
+- **AND** the button remains accessible via keyboard and screen readers
+- **AND** clicking the button removes the corresponding word pair row
 
 ### Requirement: Word Set Persistence
 
@@ -77,7 +93,7 @@ The system SHALL allow users to export word sets as JSON files and import previo
 
 ### Requirement: Accessibility
 
-The system SHALL ensure the word set creation form is keyboard accessible and follows WCAG guidelines.
+The system SHALL ensure the word set creation form is keyboard accessible and follows WCAG guidelines. All interactive elements with icons SHALL provide appropriate text alternatives for assistive technologies.
 
 #### Scenario: Keyboard-only navigation
 
@@ -85,6 +101,14 @@ The system SHALL ensure the word set creation form is keyboard accessible and fo
 - **WHEN** they use Tab/Shift+Tab to navigate form fields
 - **THEN** all interactive elements are reachable
 - **AND** form labels and ARIA attributes are properly associated
+
+#### Scenario: Icon buttons are screen reader accessible
+
+- **GIVEN** a user is using a screen reader
+- **WHEN** they navigate to buttons with icons (Add row, Remove)
+- **THEN** the screen reader announces the button's purpose clearly
+- **AND** icon-only buttons have appropriate `aria-label` or visible text
+- **AND** the button's action is understandable without visual context
 
 ### Requirement: Internationalization
 
@@ -107,7 +131,7 @@ The system SHALL use next-intl for all user-facing text to support multiple lang
 
 ### Requirement: Quiz Setup Interface
 
-The system SHALL provide a quiz setup interface where users can select a word set, choose the source language for practice, and optionally enable random question order, with persistent access to create new word sets.
+The system SHALL provide a quiz setup interface where users can select a word set, choose the source language for practice, and optionally enable random question order, with persistent access to create new word sets. When the user starts a quiz, the system SHALL navigate to a dedicated `/quiz` route with query parameters encoding the quiz configuration.
 
 #### Scenario: User selects word set, source language, and question order
 
@@ -119,13 +143,12 @@ The system SHALL provide a quiz setup interface where users can select a word se
 - **AND** displays a "Start Quiz" button
 - **AND** displays a link to create new word sets
 
-#### Scenario: User enables random order
+#### Scenario: User starts quiz and navigates to dedicated route
 
-- **GIVEN** a user is on the quiz setup page
-- **WHEN** they check the "Random order" checkbox
-- **AND** they start the quiz
-- **THEN** the system randomizes the order of questions at initialization
-- **AND** presents words in the randomized sequence
+- **GIVEN** a user has selected a word set, source language, and optional random order
+- **WHEN** they click "Start Quiz"
+- **THEN** the system navigates to `/quiz?id=<wordset-id>&source=<sk|en>&random=<true|false>`
+- **AND** the quiz session begins on the `/quiz` page
 
 #### Scenario: Random order checkbox is accessible
 
@@ -164,26 +187,50 @@ The system SHALL present words from the selected word set one at a time, either 
 
 ### Requirement: Quiz Results Summary
 
-The system SHALL display a summary of quiz results after all words have been reviewed, showing performance statistics.
+The system SHALL display a summary of quiz results after all words have been reviewed, showing performance statistics. The summary SHALL provide a button to return to the quiz setup page.
 
 #### Scenario: Quiz completion shows summary
 
-- **GIVEN** a user has completed reviewing all words in a quiz
+- **GIVEN** a user has completed reviewing all words in a quiz on `/quiz`
 - **WHEN** they mark the final word as correct or incorrect
-- **THEN** the system displays a summary screen
+- **THEN** the system displays a summary screen on the same page
 - **AND** shows the total number of words reviewed
 - **AND** shows the count of words marked correct
 - **AND** shows the count of words marked incorrect
 - **AND** calculates and displays a percentage score
 - **AND** provides a "Start New Quiz" button
 
+#### Scenario: User returns to setup from summary
+
+- **GIVEN** a user is viewing the quiz summary on `/quiz`
+- **WHEN** they click "Start New Quiz"
+- **THEN** the system navigates to `/` (home/setup page)
+- **AND** the user can select a new word set and configuration
+
 ### Requirement: Quiz Session State
 
-The system SHALL maintain quiz session state in memory and reset when a new quiz is started or the page is reloaded.
+The system SHALL maintain quiz session state in memory on the `/quiz` page and reset when a new quiz is started or the page is reloaded. The quiz SHALL read configuration from query parameters (`id`, `source`, `random`) and handle missing or invalid parameters gracefully.
+
+#### Scenario: Quiz loads from query parameters
+
+- **GIVEN** a user navigates to `/quiz?id=<valid-wordset-id>&source=sk&random=true`
+- **WHEN** the page loads
+- **THEN** the system loads the word set from localStorage using the provided `id`
+- **AND** initializes the quiz with the specified source language (`sk`)
+- **AND** applies random order if `random=true`
+- **AND** displays the first question
+
+#### Scenario: Missing or invalid word set ID
+
+- **GIVEN** a user navigates to `/quiz` without an `id` parameter or with an invalid `id`
+- **WHEN** the page loads
+- **THEN** the system detects the missing or invalid word set
+- **AND** redirects the user to `/` (home/setup page)
+- **OR** displays an error message with a link back to home
 
 #### Scenario: In-progress quiz state is maintained
 
-- **GIVEN** a user is in the middle of a quiz session
+- **GIVEN** a user is in the middle of a quiz session on `/quiz`
 - **WHEN** they answer questions sequentially
 - **THEN** the system maintains which words have been answered
 - **AND** tracks correct/incorrect marks
@@ -191,10 +238,11 @@ The system SHALL maintain quiz session state in memory and reset when a new quiz
 
 #### Scenario: Page reload resets quiz
 
-- **GIVEN** a user is in the middle of a quiz session
+- **GIVEN** a user is in the middle of a quiz session on `/quiz`
 - **WHEN** they reload the page
-- **THEN** the system returns to the quiz setup screen
-- **AND** does not persist the partial session
+- **THEN** the system re-initializes the quiz from query parameters
+- **AND** starts the quiz from the beginning
+- **AND** does not persist the partial session progress
 
 ### Requirement: Quiz Accessibility
 
@@ -218,3 +266,29 @@ The system SHALL use next-intl for all quiz-related UI text to support multiple 
 - **WHEN** a user views any quiz screen
 - **THEN** all labels, buttons, messages, and instructions use translation keys
 - **AND** the interface adapts to the selected locale (Slovak, English)
+
+### Requirement: Direct Quiz Navigation
+
+The system SHALL support direct navigation to a quiz session via URL with query parameters, enabling users to bookmark, share, or directly access quizzes for specific word sets.
+
+#### Scenario: User navigates directly to quiz URL
+
+- **GIVEN** a user has a valid word set ID
+- **WHEN** they navigate directly to `/quiz?id=<wordset-id>&source=sk&random=false`
+- **THEN** the system loads the specified word set
+- **AND** initializes the quiz with the specified configuration
+- **AND** begins the quiz session immediately
+
+#### Scenario: User bookmarks quiz URL
+
+- **GIVEN** a user is on `/quiz?id=<wordset-id>&source=en&random=true`
+- **WHEN** they bookmark the page
+- **AND** later return via the bookmark
+- **THEN** the system loads the same word set and configuration
+- **AND** starts a fresh quiz session with the bookmarked settings
+
+#### Scenario: User shares quiz URL
+
+- **GIVEN** a user has configured a quiz at `/quiz?id=<wordset-id>&source=sk&random=false`
+- **WHEN** they share the URL with another user who has the same word set saved
+- **THEN** the recipient can open the URL and start the quiz with the shared configuration

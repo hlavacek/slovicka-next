@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, startTransition, Suspense } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  startTransition,
+  Suspense,
+} from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { loadWordSets } from "@/lib/wordsets";
 import {

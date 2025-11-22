@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useTranslations } from "next-intl";
+import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -145,7 +146,8 @@ export default function WordSetForm({ className }: { className?: string }) {
       <div className="mb-4">
         <div className="mb-2 flex items-center justify-between">
           <div className="text-sm font-medium">{t("entriesLabel")}</div>
-          <Button variant="ghost" onClick={addRow} size="sm">
+          <Button variant="outline" onClick={addRow} size="sm">
+            <Plus className="h-4 w-4 mr-1" />
             {t("addRow")}
           </Button>
         </div>
@@ -169,8 +171,9 @@ export default function WordSetForm({ className }: { className?: string }) {
                 variant="outline"
                 onClick={() => removeRow(row.id)}
                 size="sm"
+                aria-label={t("removeButton")}
               >
-                {t("removeButton")}
+                <X className="h-4 w-4" />
               </Button>
             </div>
           ))}
