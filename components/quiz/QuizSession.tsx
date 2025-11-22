@@ -40,7 +40,10 @@ export default function QuizSession({
   ]);
 
   return (
-    <div className="w-full max-w-2xl rounded-md border bg-white p-6 shadow-sm">
+    <div
+      className="w-full max-w-2xl rounded-md border bg-white p-6 shadow-sm flex flex-col"
+      style={{ minHeight: "244px" }}
+    >
       <div className="mb-4">
         <Progress
           value={progressPercentage}
@@ -60,20 +63,22 @@ export default function QuizSession({
         </div>
       </div>
 
-      {currentQuestion.revealed && (
-        <div className="mb-8">
-          <h2 className="mb-2 text-sm font-medium text-zinc-600">
-            {state.config.sourceLanguage === "sk"
-              ? t("englishLabel")
-              : t("slovakLabel")}
-          </h2>
-          <div className="text-2xl font-semibold text-blue-600">
-            {currentQuestion.targetWord}
-          </div>
-        </div>
-      )}
+      <div className="mb-8" style={{ minHeight: "60px" }}>
+        {currentQuestion.revealed && (
+          <>
+            <h2 className="mb-2 text-sm font-medium text-zinc-600">
+              {state.config.sourceLanguage === "sk"
+                ? t("englishLabel")
+                : t("slovakLabel")}
+            </h2>
+            <div className="text-2xl font-semibold text-blue-600">
+              {currentQuestion.targetWord}
+            </div>
+          </>
+        )}
+      </div>
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 mt-auto">
         {!currentQuestion.revealed && (
           <Button onClick={onReveal}>{t("showAnswerButton")}</Button>
         )}
