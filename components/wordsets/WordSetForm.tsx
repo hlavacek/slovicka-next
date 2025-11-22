@@ -37,6 +37,7 @@ export default function WordSetForm({ className }: { className?: string }) {
   const [name, setName] = useState("");
   const [rows, setRows] = useState<Row[]>([{ id: genId(), sk: "", en: "" }]);
   const [savedSets, setSavedSets] = useState<WordSet[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [editingSetId, setEditingSetId] = useState<string | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -45,6 +46,25 @@ export default function WordSetForm({ className }: { className?: string }) {
   React.useEffect(() => {
     setSavedSets(loadWordSets());
   }, []);
+
+  // Filter and sort saved word sets
+  const filteredSavedSets = React.useMemo(() => {
+    let filtered = savedSets;
+
+    // Filter by search term if provided
+    if (searchTerm.trim()) {
+      filtered = savedSets.filter((ws) =>
+        ws.name.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+    }
+
+    // Sort by ID when no search term
+    if (!searchTerm.trim()) {
+      filtered = [...filtered].sort((a, b) => a.id.localeCompare(b.id));
+    }
+
+    return filtered;
+  }, [savedSets, searchTerm]);
 
   function updateRow(id: string, field: keyof WordPair, value: string) {
     setRows((r) =>
@@ -201,11 +221,25 @@ export default function WordSetForm({ className }: { className?: string }) {
 
       <div className="mt-6">
         <h3 className="mb-2 text-sm font-medium">{t("savedSetsTitle")}</h3>
-        <div className="flex flex-col gap-2">
+        {savedSets.length > 0 && (
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder={t("searchSavedSetsPlaceholder")}
+            className="mb-3 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900"
+          />
+        )}
+        <div className="flex flex-col gap-2 max-h-[200px] overflow-y-auto">
           {savedSets.length === 0 && (
             <div className="text-sm text-zinc-500">{t("noSavedSets")}</div>
           )}
-          {savedSets.map((s) => (
+          {savedSets.length > 0 && filteredSavedSets.length === 0 && (
+            <div className="rounded-md border border-dashed p-6 text-center text-sm text-zinc-500">
+              {t("noSavedSetsResults")}
+            </div>
+          )}
+          {filteredSavedSets.map((s) => (
             <div
               key={s.id}
               className="flex flex-wrap items-center gap-2 rounded-md border px-3 py-2"

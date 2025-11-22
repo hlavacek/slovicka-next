@@ -6,7 +6,7 @@ TBD - created by archiving change add-word-set-creator. Update Purpose after arc
 ## Requirements
 ### Requirement: Word Set Creation
 
-The system SHALL provide a user interface for creating custom vocabulary word sets containing Slovak ↔ English word pairs with navigation back to the quiz page. Interactive buttons SHALL include visual icons to enhance usability while maintaining accessibility. **The system SHALL allow users to update existing word sets by loading them into the form and saving changes, preserving the original word set ID.**
+The system SHALL provide a user interface for creating custom vocabulary word sets containing Slovak ↔ English word pairs with navigation back to the quiz page. Interactive buttons SHALL include visual icons to enhance usability while maintaining accessibility. **The system SHALL allow users to update existing word sets by loading them into the form and saving changes, preserving the original word set ID.** **The system SHALL provide a search input to filter saved word sets by name and display a scrollable list showing a maximum of 3 saved word sets at a time.**
 
 #### Scenario: User creates a new word set
 
@@ -45,6 +45,44 @@ The system SHALL provide a user interface for creating custom vocabulary word se
 - **THEN** the system displays an X or delete icon alongside or within the button
 - **AND** the button remains accessible via keyboard and screen readers
 - **AND** clicking the button removes the corresponding word pair row
+
+#### Scenario: User searches saved word sets by name
+
+- **GIVEN** a user has multiple saved word sets
+- **WHEN** they type a search term into the search input above the saved sets list
+- **THEN** the system filters the saved word sets list to show only word sets whose names contain the search term (case-insensitive)
+- **AND** the filtered list updates as the user types
+- **AND** displays matching word sets in a scrollable list
+
+#### Scenario: Saved word sets list displays maximum 3 items with scroll
+
+- **GIVEN** a user has more than 3 saved word sets (filtered or unfiltered)
+- **WHEN** they view the saved word sets list
+- **THEN** the system displays a maximum of 3 word sets at a time
+- **AND** provides vertical scrolling to access additional word sets
+- **AND** the scroll container has a fixed maximum height
+
+#### Scenario: Empty search shows all saved word sets ordered by ID
+
+- **GIVEN** a user has saved word sets
+- **WHEN** the search input is empty
+- **THEN** the system displays all saved word sets ordered by their ID
+- **AND** the list remains scrollable if more than 3 word sets exist
+
+#### Scenario: Search with no matches shows empty state
+
+- **GIVEN** a user enters a search term for saved word sets
+- **WHEN** no word sets match the search term
+- **THEN** the system displays an empty or "no results" state
+- **AND** no word set actions (load, export, delete) are available
+
+#### Scenario: Search input for saved sets is keyboard accessible
+
+- **GIVEN** a user is navigating with keyboard only
+- **WHEN** they tab to the search input for saved word sets
+- **THEN** the search input receives focus with visible indicator
+- **AND** they can type to filter saved word sets
+- **AND** can tab to navigate through filtered results
 
 #### Scenario: User loads existing word set for editing
 
