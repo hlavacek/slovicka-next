@@ -20,6 +20,26 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
   const [selectedSetId, setSelectedSetId] = useState<string | null>(null);
   const [sourceLanguage, setSourceLanguage] = useState<SourceLanguage>("sk");
   const [randomOrder, setRandomOrder] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  // Filter and sort word sets
+  const filteredWordSets = React.useMemo(() => {
+    let filtered = wordSets;
+
+    // Filter by search term if provided
+    if (searchTerm.trim()) {
+      filtered = wordSets.filter((ws) =>
+        ws.name.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+    }
+
+    // Sort by ID when no search term
+    if (!searchTerm.trim()) {
+      filtered = [...filtered].sort((a, b) => a.id.localeCompare(b.id));
+    }
+
+    return filtered;
+  }, [wordSets, searchTerm]);
 
   const canStart = selectedSetId !== null;
 
@@ -91,31 +111,44 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
         <label className="mb-2 block text-sm font-medium">
           {t("selectWordSetLabel")}
         </label>
-        <div className="flex flex-col gap-2">
-          {wordSets.map((ws) => (
-            <label
-              key={ws.id}
-              className={cn(
-                "flex cursor-pointer flex-wrap items-center gap-3 rounded-md border p-3 transition-colors hover:bg-zinc-50",
-                selectedSetId === ws.id && "border-zinc-900 bg-zinc-100",
-              )}
-            >
-              <input
-                type="radio"
-                name="wordset"
-                value={ws.id}
-                checked={selectedSetId === ws.id}
-                onChange={(e) => setSelectedSetId(e.target.value)}
-                className="h-4 w-4"
-              />
-              <div className="flex-1">
-                <div className="font-medium">{ws.name}</div>
-                <div className="text-sm text-zinc-500">
-                  {t("entriesCount", { count: ws.entries.length })}
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder={t("searchWordSetsPlaceholder")}
+          className="mb-3 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900"
+        />
+        <div className="flex flex-col gap-2 max-h-[230px] overflow-y-auto">
+          {filteredWordSets.length === 0 ? (
+            <div className="rounded-md border border-dashed p-6 text-center text-sm text-zinc-500">
+              {t("noSearchResults")}
+            </div>
+          ) : (
+            filteredWordSets.map((ws) => (
+              <label
+                key={ws.id}
+                className={cn(
+                  "flex cursor-pointer flex-wrap items-center gap-3 rounded-md border p-3 transition-colors hover:bg-zinc-50",
+                  selectedSetId === ws.id && "border-zinc-900 bg-zinc-100",
+                )}
+              >
+                <input
+                  type="radio"
+                  name="wordset"
+                  value={ws.id}
+                  checked={selectedSetId === ws.id}
+                  onChange={(e) => setSelectedSetId(e.target.value)}
+                  className="h-4 w-4"
+                />
+                <div className="flex-1">
+                  <div className="font-medium">{ws.name}</div>
+                  <div className="text-sm text-zinc-500">
+                    {t("entriesCount", { count: ws.entries.length })}
+                  </div>
                 </div>
-              </div>
-            </label>
-          ))}
+              </label>
+            ))
+          )}
         </div>
       </div>
 

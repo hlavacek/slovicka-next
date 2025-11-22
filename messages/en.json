@@ -38,6 +38,8 @@
     "title": "Practice Quiz",
     "instructions": "Select a word set and choose which language you want to practice from.",
     "selectWordSetLabel": "Select a word set",
+    "searchWordSetsPlaceholder": "Search word sets...",
+    "noSearchResults": "No word sets match your search",
     "entriesLabel": "entries",
     "sourceLanguageLabel": "Practice from",
     "slovakLabel": "Slovak",
