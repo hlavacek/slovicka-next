@@ -9,6 +9,12 @@ import { SourceLanguage } from "@/lib/quiz";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Switch } from "@/components/ui/switch";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 type QuizSetupProps = {
   wordSets: WordSet[];
@@ -20,7 +26,7 @@ export default function QuizSetup({ wordSets, preselectedId }: QuizSetupProps) {
   const router = useRouter();
   const [selectedSetId, setSelectedSetId] = useState<string | null>(null);
   const [sourceLanguage, setSourceLanguage] = useState<SourceLanguage>("sk");
-  const [randomOrder, setRandomOrder] = useState<boolean>(false);
+  const [randomOrder, setRandomOrder] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   // Initialize selection with preselectedId if valid
@@ -82,47 +88,9 @@ export default function QuizSetup({ wordSets, preselectedId }: QuizSetupProps) {
 
   return (
     <div className="w-full max-w-2xl rounded-md border bg-white p-6 shadow-sm">
-      <h2 className="mb-4 text-lg font-semibold">{t("title")}</h2>
+      <h2 className="mb-2 text-lg font-semibold">{t("title")}</h2>
 
-      <div className="mb-6 gap-4 flex flex-wrap">
-        <label className="text-sm font-medium items-center flex">
-          {t("sourceLanguageLabel")}
-        </label>
-        <label className="flex cursor-pointer items-center gap-2">
-          <input
-            type="radio"
-            name="language"
-            value="sk"
-            checked={sourceLanguage === "sk"}
-            onChange={() => setSourceLanguage("sk")}
-            className="h-4 w-4"
-          />
-          <span>{t("englishLabel")}</span>
-        </label>
-        <label className="flex cursor-pointer items-center gap-2">
-          <input
-            type="radio"
-            name="language"
-            value="en"
-            checked={sourceLanguage === "en"}
-            onChange={() => setSourceLanguage("en")}
-            className="h-4 w-4"
-          />
-          <span>{t("slovakLabel")}</span>
-        </label>
-      </div>
-
-      <div className="mb-6">
-        <label className="flex cursor-pointer items-center gap-2">
-          <Switch
-            checked={randomOrder}
-            onCheckedChange={(checked) => setRandomOrder(checked)}
-          />
-          <span className="text-sm">{t("randomOrderLabel")}</span>
-        </label>
-      </div>
-
-      <div className="mb-6">
+      <div className="mb-2">
         <label className="mb-2 block text-sm font-medium">
           {t("selectWordSetLabel")}
         </label>
@@ -166,6 +134,51 @@ export default function QuizSetup({ wordSets, preselectedId }: QuizSetupProps) {
           )}
         </div>
       </div>
+
+      <Accordion type="single" collapsible className="mb-4">
+        <AccordionItem value="settings">
+          <AccordionTrigger>{t("settingsTitle")}</AccordionTrigger>
+          <AccordionContent>
+            <div className="mb-4 gap-4 flex flex-wrap">
+              <label className="text-sm font-medium items-center flex">
+                {t("sourceLanguageLabel")}
+              </label>
+              <label className="flex cursor-pointer items-center gap-2">
+                <input
+                  type="radio"
+                  name="language"
+                  value="sk"
+                  checked={sourceLanguage === "sk"}
+                  onChange={() => setSourceLanguage("sk")}
+                  className="h-4 w-4"
+                />
+                <span>{t("englishLabel")}</span>
+              </label>
+              <label className="flex cursor-pointer items-center gap-2">
+                <input
+                  type="radio"
+                  name="language"
+                  value="en"
+                  checked={sourceLanguage === "en"}
+                  onChange={() => setSourceLanguage("en")}
+                  className="h-4 w-4"
+                />
+                <span>{t("slovakLabel")}</span>
+              </label>
+            </div>
+
+            <div>
+              <label className="flex cursor-pointer items-center gap-2">
+                <Switch
+                  checked={randomOrder}
+                  onCheckedChange={(checked) => setRandomOrder(checked)}
+                />
+                <span className="text-sm">{t("randomOrderLabel")}</span>
+              </label>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
 
       <div className="flex mb-6 gap-4 flex-wrap">
         <Button onClick={handleStart} disabled={!canStart}>

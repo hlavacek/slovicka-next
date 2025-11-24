@@ -118,7 +118,7 @@ The system SHALL use next-intl for all user-facing text to support multiple lang
 
 ### Requirement: Quiz Setup Interface
 
-The system SHALL provide a quiz setup interface where users can select a word set, choose the source language for practice, and optionally enable random question order, with persistent access to create new word sets. **The system SHALL provide a search input to filter word sets by name and display a scrollable list showing a maximum of 3 word sets at a time.** When the user starts a quiz, the system SHALL navigate to a dedicated `/quiz` route with query parameters encoding the quiz configuration.
+The system SHALL provide a quiz setup interface where users can select a word set, choose the source language for practice, and optionally enable random question order, with persistent access to create new word sets. **The system SHALL provide a search input to filter word sets by name and display a scrollable list showing a maximum of 3 word sets at a time.** When the user starts a quiz, the system SHALL navigate to a dedicated `/quiz` route with query parameters encoding the quiz configuration. **The system SHALL organize source language and question order settings in a collapsible accordion section titled "Settings" that is collapsed by default.**
 
 #### Scenario: User selects word set, source language, and question order
 
@@ -126,70 +126,50 @@ The system SHALL provide a quiz setup interface where users can select a word se
 - **WHEN** they navigate to `/`
 - **THEN** the system displays a search input for filtering word sets
 - **AND** displays a scrollable list of available word sets (max 3 visible)
-- **AND** provides radio buttons or select controls to choose source language (Slovak or English)
-- **AND** provides a checkbox to enable random question order (unchecked by default)
+- **AND** displays a collapsible "Settings" accordion section (collapsed by default)
+- **AND** when expanded, the accordion shows radio buttons or select controls to choose source language (Slovak or English)
+- **AND** when expanded, the accordion shows a switch to enable random question order (enabled by default)
 - **AND** displays a "Start Quiz" button
 - **AND** displays a link to create new word sets
 
-#### Scenario: User searches for word sets by name
+#### Scenario: Settings accordion is collapsed by default
 
-- **GIVEN** a user has multiple saved word sets
-- **WHEN** they type a search term into the search input
-- **THEN** the system filters the word set list to show only word sets whose names contain the search term (case-insensitive)
-- **AND** the filtered list updates as the user types
-- **AND** displays matching word sets in a scrollable list
+- **GIVEN** a user navigates to the quiz setup page
+- **WHEN** the page loads
+- **THEN** the system displays a "Settings" accordion header
+- **AND** the settings content (source language and random order) is hidden by default
+- **AND** a chevron icon indicates the collapsed state
 
-#### Scenario: Word set list displays maximum 3 items with scroll
+#### Scenario: User expands settings accordion
 
-- **GIVEN** a user has more than 3 word sets (filtered or unfiltered)
-- **WHEN** they view the word set list
-- **THEN** the system displays a maximum of 3 word sets at a time
-- **AND** provides vertical scrolling to access additional word sets
-- **AND** the scroll container has a fixed maximum height
+- **GIVEN** a user is on the quiz setup page
+- **WHEN** they click the "Settings" accordion header
+- **THEN** the system expands the accordion to reveal source language and random order controls
+- **AND** the chevron icon rotates to indicate the expanded state
+- **AND** all settings controls are fully functional
 
-#### Scenario: Empty search shows all word sets ordered by ID
+#### Scenario: User collapses settings accordion
 
-- **GIVEN** a user has saved word sets
-- **WHEN** the search input is empty
-- **THEN** the system displays all word sets ordered by their ID
-- **AND** the list remains scrollable if more than 3 word sets exist
+- **GIVEN** the settings accordion is expanded
+- **WHEN** the user clicks the "Settings" accordion header again
+- **THEN** the system collapses the accordion to hide the settings
+- **AND** the chevron icon rotates back to the collapsed state
+- **AND** the user's settings selections are preserved
 
-#### Scenario: Search with no matches shows empty state
-
-- **GIVEN** a user enters a search term
-- **WHEN** no word sets match the search term
-- **THEN** the system displays an empty or "no results" state
-- **AND** does not allow starting a quiz without a valid selection
-
-#### Scenario: Selected word set persists during search
-
-- **GIVEN** a user has selected a word set
-- **WHEN** they enter a search term that filters out the selected word set
-- **THEN** the selection remains active internally
-- **AND** the user can clear the search to see their selection again
-- **OR** the system keeps the selection but shows it's not in the filtered list
-
-#### Scenario: User starts quiz and navigates to dedicated route
-
-- **GIVEN** a user has selected a word set, source language, and optional random order
-- **WHEN** they click "Start Quiz"
-- **THEN** the system navigates to `/quiz?id=<wordset-id>&source=<sk|en>&random=<true|false>`
-- **AND** the quiz session begins on the `/quiz` page
-
-#### Scenario: Random order checkbox is accessible
+#### Scenario: Settings accordion is keyboard accessible
 
 - **GIVEN** a user is navigating with keyboard only
-- **WHEN** they tab to the random order checkbox
-- **THEN** the checkbox receives focus with visible indicator
-- **AND** pressing Space or Enter toggles the checkbox state
+- **WHEN** they tab to the "Settings" accordion header
+- **THEN** the system displays focus indication
+- **AND** pressing Space or Enter toggles the accordion open/closed
+- **AND** when expanded, users can tab through the settings controls
 
-#### Scenario: Search input is keyboard accessible
+#### Scenario: Random order is enabled by default
 
-- **GIVEN** a user is navigating with keyboard only
-- **WHEN** they tab to the search input
-- **THEN** the search input receives focus with visible indicator
-- **AND** they can type to filter word sets
-- **AND** can tab to navigate through filtered results
+- **GIVEN** a user navigates to the quiz setup page
+- **WHEN** they view or expand the settings
+- **THEN** the random order switch is in the "on" position by default
+- **AND** quiz sessions will use random order unless the user toggles it off
 
 ### Requirement: Sequential Quiz Flow
 
