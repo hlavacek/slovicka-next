@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { QuizResult } from "@/lib/quiz";
+import SuccessIndicator from "@/components/quiz/SuccessIndicator";
 
 type QuizSummaryProps = {
   result: QuizResult;
@@ -25,6 +26,16 @@ export default function QuizSummary({ result, wordSetId }: QuizSummaryProps) {
       <h2 className="mb-6 text-lg font-semibold">{t("summaryTitle")}</h2>
 
       <div className="mb-6 space-y-4">
+        {/* Colorful animated success indicator */}
+        <div className="rounded-lg border-2 border-zinc-200 overflow-hidden">
+          <SuccessIndicator
+            percentage={result.percentage}
+            animate={true}
+            showIcon={true}
+            ariaLabel={t("scoreLabel")}
+          />
+        </div>
+
         <div className="flex items-center justify-between rounded-md border p-4">
           <span className="text-sm font-medium">{t("totalWords")}</span>
           <span className="text-2xl font-bold">{result.total}</span>
@@ -45,15 +56,6 @@ export default function QuizSummary({ result, wordSetId }: QuizSummaryProps) {
           </span>
           <span className="text-2xl font-bold text-red-700">
             {result.incorrect}
-          </span>
-        </div>
-
-        <div className="flex items-center justify-between rounded-md border border-blue-200 bg-blue-50 p-4">
-          <span className="text-sm font-medium text-blue-900">
-            {t("scoreLabel")}
-          </span>
-          <span className="text-2xl font-bold text-blue-700">
-            {result.percentage}%
           </span>
         </div>
       </div>
