@@ -16,6 +16,7 @@ import {
   revealAnswer,
   recordAnswer,
   calculateScore,
+  updateWordSetStats,
 } from "@/lib/quiz";
 import QuizSession from "@/components/quiz/QuizSession";
 import QuizSummary from "@/components/quiz/QuizSummary";
@@ -78,6 +79,7 @@ function QuizPageContent() {
     setQuizState(newState);
 
     if (newState.completed) {
+      updateWordSetStats(newState);
       setPhase("summary");
     }
   }

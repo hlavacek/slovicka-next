@@ -43,6 +43,8 @@
     "noSearchResults": "Žiadne zoznamy slovíčok nevyhovujú vyhľadávaniu",
     "entriesCount": "{count, plural, =0 {# položiek} =1 {# položka} few {# položky} other {# položiek}}",
     "settingsTitle": "Upraviť precvičovanie",
+    "successRate": "Úspešnosť",
+    "notPracticed": "Neprecvičované",
     "sourceLanguageLabel": "Precvičovať",
     "slovakLabel": "Slovenčina",
     "englishLabel": "Angličtina",

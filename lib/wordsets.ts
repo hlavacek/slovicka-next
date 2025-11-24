@@ -3,11 +3,17 @@ export type WordPair = {
   en: string;
 };
 
+export type QuizStats = {
+  correct: number;
+  total: number;
+};
+
 export type WordSet = {
   id: string;
   name: string;
   entries: WordPair[];
   createdAt?: string;
+  lastQuizStats?: QuizStats;
 };
 
 const STORAGE_KEY = "slovicka:wordsets";

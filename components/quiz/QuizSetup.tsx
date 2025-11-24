@@ -129,6 +129,26 @@ export default function QuizSetup({ wordSets, preselectedId }: QuizSetupProps) {
                     {t("entriesCount", { count: ws.entries.length })}
                   </div>
                 </div>
+                <div className="text-sm text-zinc-600">
+                  {ws.lastQuizStats ? (
+                    <div className="text-right">
+                      <div className="text-xs text-zinc-500">
+                        {t("successRate")}
+                      </div>
+                      <div className="font-semibold">
+                        {Math.round(
+                          (ws.lastQuizStats.correct / ws.lastQuizStats.total) *
+                            100,
+                        )}
+                        %
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-xs text-zinc-400">
+                      {t("notPracticed")}
+                    </div>
+                  )}
+                </div>
               </label>
             ))
           )}

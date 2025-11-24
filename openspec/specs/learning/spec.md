@@ -37,28 +37,15 @@ Users SHALL be able to create, edit, and manage vocabulary word sets with at lea
 
 ### Requirement: Word Set Persistence
 
-The system SHALL persist created word sets in browser localStorage for offline access and cross-session availability, with the ability to delete unwanted word sets.
+Word sets SHALL persist in browser storage across sessions and support tracking of learning progress for each set.
 
-#### Scenario: Word sets persist across sessions
+#### Scenario: Word set tracks most recent quiz statistics
 
-- **GIVEN** a user has created and saved word sets
-- **WHEN** they close and reopen the browser
-- **THEN** previously saved word sets remain available
-
-#### Scenario: User deletes a word set
-
-- **GIVEN** a user has saved word sets displayed in the word set form
-- **WHEN** they click the delete button for a specific word set
-- **THEN** the system removes the word set from localStorage
-- **AND** removes the word set from the displayed list
-- **AND** the word set no longer appears in the quiz setup page
-
-#### Scenario: User confirms deletion
-
-- **GIVEN** a user clicks the delete button for a word set
-- **WHEN** a confirmation prompt appears
-- **AND** the user confirms the deletion
-- **THEN** the word set is permanently removed
+- **GIVEN** a user completes a quiz for a word set
+- **WHEN** the quiz is finished and results are calculated
+- **THEN** the system stores the number of correct answers and total questions in the word set's statistics
+- **AND** the statistics persist in localStorage along with the word set data
+- **AND** subsequent quizzes for the same word set update the statistics
 
 ### Requirement: Import and Export
 
@@ -118,58 +105,33 @@ The system SHALL use next-intl for all user-facing text to support multiple lang
 
 ### Requirement: Quiz Setup Interface
 
-The system SHALL provide a quiz setup interface where users can select a word set, choose the source language for practice, and optionally enable random question order, with persistent access to create new word sets. **The system SHALL provide a search input to filter word sets by name and display a scrollable list showing a maximum of 3 word sets at a time.** When the user starts a quiz, the system SHALL navigate to a dedicated `/quiz` route with query parameters encoding the quiz configuration. **The system SHALL organize source language and question order settings in a collapsible accordion section titled "Settings" that is collapsed by default.**
+The system SHALL provide a quiz setup interface where users can select a word set, choose the source language for practice, and optionally enable random question order, with persistent access to create new word sets. **The system SHALL provide a search input to filter word sets by name and display a scrollable list showing a maximum of 3 word sets at a time.** When the user starts a quiz, the system SHALL navigate to a dedicated `/quiz` route with query parameters encoding the quiz configuration. **The system SHALL organize source language and question order settings in a collapsible accordion section titled "Settings" that is collapsed by default.** **The system SHALL display the success rate from the most recent quiz for each word set on the right side of the word set card.**
 
-#### Scenario: User selects word set, source language, and question order
+#### Scenario: User views success rate on word set cards
 
-- **GIVEN** a user has at least one saved word set
-- **WHEN** they navigate to `/`
-- **THEN** the system displays a search input for filtering word sets
-- **AND** displays a scrollable list of available word sets (max 3 visible)
-- **AND** displays a collapsible "Settings" accordion section (collapsed by default)
-- **AND** when expanded, the accordion shows radio buttons or select controls to choose source language (Slovak or English)
-- **AND** when expanded, the accordion shows a switch to enable random question order (enabled by default)
-- **AND** displays a "Start Quiz" button
-- **AND** displays a link to create new word sets
+- **GIVEN** a user has word sets with varying practice history
+- **WHEN** they view the quiz setup page
+- **THEN** the system displays each word set card
+- **AND** for word sets that have been practiced, shows the success rate as a percentage on the right side (e.g., "85%")
+- **AND** for word sets that have not been practiced, shows a "not practiced" indicator
+- **AND** the success rate reflects the most recent quiz results (correct answers / total questions)
 
-#### Scenario: Settings accordion is collapsed by default
+#### Scenario: Success rate updates after quiz completion
 
-- **GIVEN** a user navigates to the quiz setup page
-- **WHEN** the page loads
-- **THEN** the system displays a "Settings" accordion header
-- **AND** the settings content (source language and random order) is hidden by default
-- **AND** a chevron icon indicates the collapsed state
+- **GIVEN** a user completes a quiz for a word set
+- **WHEN** they navigate back to the quiz setup page
+- **THEN** the system displays the updated success rate for that word set
+- **AND** the success rate reflects the performance from the just-completed quiz
+- **AND** previous success rates for the same word set are replaced
 
-#### Scenario: User expands settings accordion
+#### Scenario: Word sets without statistics display correctly
 
-- **GIVEN** a user is on the quiz setup page
-- **WHEN** they click the "Settings" accordion header
-- **THEN** the system expands the accordion to reveal source language and random order controls
-- **AND** the chevron icon rotates to indicate the expanded state
-- **AND** all settings controls are fully functional
-
-#### Scenario: User collapses settings accordion
-
-- **GIVEN** the settings accordion is expanded
-- **WHEN** the user clicks the "Settings" accordion header again
-- **THEN** the system collapses the accordion to hide the settings
-- **AND** the chevron icon rotates back to the collapsed state
-- **AND** the user's settings selections are preserved
-
-#### Scenario: Settings accordion is keyboard accessible
-
-- **GIVEN** a user is navigating with keyboard only
-- **WHEN** they tab to the "Settings" accordion header
-- **THEN** the system displays focus indication
-- **AND** pressing Space or Enter toggles the accordion open/closed
-- **AND** when expanded, users can tab through the settings controls
-
-#### Scenario: Random order is enabled by default
-
-- **GIVEN** a user navigates to the quiz setup page
-- **WHEN** they view or expand the settings
-- **THEN** the random order switch is in the "on" position by default
-- **AND** quiz sessions will use random order unless the user toggles it off
+- **GIVEN** a user has word sets created before statistics tracking was implemented
+- **WHEN** they view the quiz setup page
+- **THEN** the system displays those word sets normally
+- **AND** shows a "not practiced" or similar indicator instead of a percentage
+- **AND** allows the user to start a quiz with those word sets
+- **AND** statistics are added after the first quiz completion
 
 ### Requirement: Sequential Quiz Flow
 
@@ -218,26 +180,16 @@ The system SHALL present words from the selected word set one at a time, either 
 
 ### Requirement: Quiz Results Summary
 
-The system SHALL display a summary of quiz results after all words have been reviewed, showing performance statistics. **The summary SHALL provide a button to return to the quiz setup page with the current word set pre-selected.**
+The system SHALL display a summary of quiz results after all words have been reviewed, showing performance statistics. **The summary SHALL provide a button to return to the quiz setup page with the current word set pre-selected.** **The system SHALL update the word set's success statistics based on the current quiz results before navigation.**
 
-#### Scenario: Quiz completion shows summary
+#### Scenario: Quiz completion updates word set statistics
 
-- **GIVEN** a user has completed reviewing all words in a quiz on `/quiz`
-- **WHEN** they mark the final word as correct or incorrect
-- **THEN** the system displays a summary screen on the same page
-- **AND** shows the total number of words reviewed
-- **AND** shows the count of words marked correct
-- **AND** shows the count of words marked incorrect
-- **AND** calculates and displays a percentage score
-- **AND** provides a "Start New Quiz" button
-
-#### Scenario: User returns to setup from summary with word set ID
-
-- **GIVEN** a user is viewing the quiz summary on `/quiz` for a specific word set
-- **WHEN** they click "Start New Quiz"
-- **THEN** the system navigates to `/?wordset=<id>` with the current word set ID
-- **AND** the quiz setup page pre-selects the same word set
-- **AND** the user can modify configuration or select a different word set
+- **GIVEN** a user completes a quiz
+- **WHEN** the quiz results are displayed
+- **THEN** the system calculates the number of correct and total answers
+- **AND** updates the word set's lastQuizStats field with this data
+- **AND** persists the updated word set to localStorage
+- **AND** the statistics are available for display on the quiz setup page
 
 ### Requirement: Quiz Session State
 

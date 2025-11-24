@@ -1,4 +1,4 @@
-import { WordSet } from "./wordsets";
+import { WordSet, saveWordSet } from "./wordsets";
 import { shuffleArray } from "./utils";
 
 export type SourceLanguage = "sk" | "en";
@@ -102,4 +102,16 @@ export function calculateScore(state: QuizState): QuizResult {
     incorrect,
     percentage,
   };
+}
+
+export function updateWordSetStats(state: QuizState): void {
+  const result = calculateScore(state);
+  const updatedWordSet: WordSet = {
+    ...state.config.wordSet,
+    lastQuizStats: {
+      correct: result.correct,
+      total: result.total,
+    },
+  };
+  saveWordSet(updatedWordSet);
 }
