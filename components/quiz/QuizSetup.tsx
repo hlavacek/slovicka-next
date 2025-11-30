@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { WordSet } from "@/lib/wordsets";
 import { SourceLanguage } from "@/lib/quiz";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -20,23 +19,14 @@ import { Star, Sparkles, Trophy } from "lucide-react";
 
 type QuizSetupProps = {
   wordSets: WordSet[];
-  preselectedId?: string;
 };
 
-export default function QuizSetup({ wordSets, preselectedId }: QuizSetupProps) {
+export default function QuizSetup({ wordSets }: QuizSetupProps) {
   const t = useTranslations("Quiz");
   const router = useRouter();
-  const [selectedSetId, setSelectedSetId] = useState<string | null>(null);
   const [sourceLanguage, setSourceLanguage] = useState<SourceLanguage>("sk");
   const [randomOrder, setRandomOrder] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
-
-  // Initialize selection with preselectedId if valid
-  React.useEffect(() => {
-    if (preselectedId && wordSets.some((ws) => ws.id === preselectedId)) {
-      setSelectedSetId(preselectedId);
-    }
-  }, [preselectedId, wordSets]);
 
   // Filter and sort word sets
   const filteredWordSets = React.useMemo(() => {
@@ -49,27 +39,17 @@ export default function QuizSetup({ wordSets, preselectedId }: QuizSetupProps) {
       );
     }
 
-    // Sort by ID when no search term, but show preselected first
+    // Sort by ID when no search term
     if (!searchTerm.trim()) {
-      filtered = [...filtered].sort((a, b) => {
-        // If preselectedId exists and matches one of the items, put it first
-        if (preselectedId) {
-          if (a.id === preselectedId) return -1;
-          if (b.id === preselectedId) return 1;
-        }
-        return a.id.localeCompare(b.id);
-      });
+      filtered = [...filtered].sort((a, b) => a.id.localeCompare(b.id));
     }
 
     return filtered;
-  }, [wordSets, searchTerm, preselectedId]);
+  }, [wordSets, searchTerm]);
 
-  const canStart = selectedSetId !== null;
-
-  function handleStart() {
-    if (!selectedSetId) return;
+  function handleWordSetClick(wordSetId: string) {
     const params = new URLSearchParams({
-      id: selectedSetId,
+      id: wordSetId,
       source: sourceLanguage,
       random: randomOrder.toString(),
     });
@@ -127,14 +107,10 @@ export default function QuizSetup({ wordSets, preselectedId }: QuizSetupProps) {
               };
 
               return (
-                <label
+                <button
                   key={ws.id}
-                  className={cn(
-                    "relative flex flex-col cursor-pointer rounded-lg border-2 transition-all hover:shadow-md",
-                    selectedSetId === ws.id
-                      ? "border-zinc-900 bg-zinc-50"
-                      : "border-zinc-200 bg-white hover:border-zinc-300",
-                  )}
+                  onClick={() => handleWordSetClick(ws.id)}
+                  className="relative flex flex-col cursor-pointer rounded-lg border-2 transition-all hover:shadow-md border-zinc-200 bg-white hover:border-zinc-300 text-left w-full"
                 >
                   {/* Colorful progress bar at bottom */}
                   {successPercentage !== null && (
@@ -149,14 +125,6 @@ export default function QuizSetup({ wordSets, preselectedId }: QuizSetupProps) {
                   )}
                   {/* Card content */}
                   <div className="flex items-center gap-3 px-4 py-3 pb-4 z-10">
-                    <input
-                      type="radio"
-                      name="wordset"
-                      value={ws.id}
-                      checked={selectedSetId === ws.id}
-                      onChange={(e) => setSelectedSetId(e.target.value)}
-                      className="h-4 w-4 shrink-0 accent-zinc-900"
-                    />
                     <div className="flex-1 min-w-0">
                       <div className="font-semibold text-zinc-900">
                         {ws.name}
@@ -180,7 +148,7 @@ export default function QuizSetup({ wordSets, preselectedId }: QuizSetupProps) {
                       )}
                     </div>
                   </div>
-                </label>
+                </button>
               );
             })
           )}
@@ -233,10 +201,6 @@ export default function QuizSetup({ wordSets, preselectedId }: QuizSetupProps) {
       </Accordion>
 
       <div className="flex mb-6 gap-4 flex-wrap">
-        <Button onClick={handleStart} disabled={!canStart}>
-          {t("startButton")}
-        </Button>
-
         <Link href="/word-sets/new">
           <Button variant="outline">{t("createNewWordSetLink")}</Button>
         </Link>

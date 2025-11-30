@@ -3,9 +3,7 @@
 ## Purpose
 
 TBD - created by archiving change add-word-set-creator. Update Purpose after archive.
-
 ## Requirements
-
 ### Requirement: Word Set Creation
 
 Users SHALL be able to create, edit, and manage vocabulary word sets with at least one word pair entry.
@@ -105,7 +103,48 @@ The system SHALL use next-intl for all user-facing text to support multiple lang
 
 ### Requirement: Quiz Setup Interface
 
-The system SHALL provide a quiz setup interface where users can select a word set, choose the source language for practice, and optionally enable random question order, with persistent access to create new word sets. **The system SHALL provide a search input to filter word sets by name and display a scrollable list showing a maximum of 3 word sets at a time.** When the user starts a quiz, the system SHALL navigate to a dedicated `/quiz` route with query parameters encoding the quiz configuration. **The system SHALL organize source language and question order settings in a collapsible accordion section titled "Settings" that is collapsed by default.** **The system SHALL display the success rate from the most recent quiz for each word set using a colorful, animated progress fill background on the word set card that indicates performance level with kid-friendly colors and icons.**
+The system SHALL provide a quiz setup interface where users can select a word set to immediately launch a quiz. **The system SHALL provide a search input to filter word sets by name and display a scrollable list showing a maximum of 3 word sets at a time.** When the user clicks a word set, the system SHALL immediately navigate to the `/quiz` route with the currently selected settings. **The system SHALL organize source language and question order settings in a collapsible accordion section titled "Settings" that is collapsed by default, with default values of source language = Slovak and random order = true.** **The system SHALL display the success rate from the most recent quiz for each word set using a colorful, animated progress fill background on the word set card that indicates performance level with kid-friendly colors and icons.**
+
+#### Scenario: User launches quiz by clicking word set
+
+- **GIVEN** a user has at least one saved word set
+- **WHEN** they navigate to `/`
+- **THEN** the system displays a search input for filtering word sets
+- **AND** displays a scrollable list of available word sets (max 3 visible)
+- **AND** each word set is displayed as a clickable card
+- **AND** displays a collapsible "Settings" accordion section (collapsed by default)
+- **AND** no "Start Quiz" button is visible
+- **AND** clicking a word set card immediately navigates to `/quiz?id=<wordset-id>&source=<current-source>&random=<current-random>`
+
+#### Scenario: Settings accordion controls quiz launch parameters
+
+- **GIVEN** a user is on the quiz setup page
+- **WHEN** they expand the settings accordion and change source language to English
+- **AND** they click a word set card
+- **THEN** the quiz launches with source=en reflecting the accordion setting
+
+#### Scenario: Word set cards are keyboard accessible
+
+- **GIVEN** a user is navigating with keyboard only
+- **WHEN** they tab to word set cards
+- **THEN** the system displays clear focus indicators
+- **AND** pressing Enter or Space on a focused card launches the quiz
+- **AND** the cards behave as interactive buttons
+
+#### Scenario: Word set cards provide clear visual feedback
+
+- **GIVEN** a user views the quiz setup page
+- **WHEN** they hover over a word set card
+- **THEN** the system provides visual feedback (e.g., shadow, border change)
+- **AND** the cursor changes to pointer to indicate clickability
+
+#### Scenario: Default quiz configuration is applied
+
+- **GIVEN** a user clicks a word set card without opening settings
+- **WHEN** the quiz initializes
+- **THEN** the quiz uses Slovak as the source language (practice English → Slovak translation)
+- **AND** the quiz uses random question order
+- **AND** these defaults were applied from the accordion's initial state
 
 #### Scenario: User views success rate on word set cards
 
@@ -138,7 +177,7 @@ The system SHALL provide a quiz setup interface where users can select a word se
 - **WHEN** they view the quiz setup page
 - **THEN** the system displays those word sets normally
 - **AND** shows a "not practiced" or similar indicator instead of a colorful background
-- **AND** allows the user to start a quiz with those word sets
+- **AND** allows the user to launch a quiz with those word sets
 - **AND** statistics are added after the first quiz completion
 
 #### Scenario: Colorful backgrounds are accessible
@@ -197,7 +236,7 @@ The system SHALL present words from the selected word set one at a time, either 
 
 ### Requirement: Quiz Results Summary
 
-The system SHALL display a summary of quiz results after all words have been reviewed, showing performance statistics. **The summary SHALL provide a button to return to the quiz setup page with the current word set pre-selected.** **The system SHALL update the word set's success statistics based on the current quiz results before navigation.** **The summary SHALL display a colorful, animated visual indicator showing the quiz performance with kid-friendly colors, smooth transitions, and celebratory icons.**
+The system SHALL display a summary of quiz results after all words have been reviewed, showing performance statistics. **The summary SHALL provide a button to return to the quiz setup page with the current word set pre-selected.** **The summary SHALL provide a button to immediately repeat the same quiz with identical configuration (same word set, source language, and random order setting).** **The system SHALL update the word set's success statistics based on the current quiz results before navigation.** **The summary SHALL display a colorful, animated visual indicator showing the quiz performance with kid-friendly colors, smooth transitions, and celebratory icons.**
 
 #### Scenario: Quiz completion displays colorful summary
 
@@ -220,6 +259,29 @@ The system SHALL display a summary of quiz results after all words have been rev
 - **AND** updates the word set's lastQuizStats field with this data
 - **AND** persists the updated word set to localStorage
 - **AND** the statistics are available for display on the quiz setup page with the new colorful visual treatment
+
+#### Scenario: User repeats the same quiz from summary page
+
+- **GIVEN** a user has completed a quiz and is viewing the summary page
+- **WHEN** they click the "Repeat Quiz" button
+- **THEN** the system navigates to `/quiz` with the same query parameters (word set ID, source language, random order)
+- **AND** the quiz reinitializes with identical configuration
+- **AND** the quiz starts from the beginning with the same settings
+- **AND** if random order was enabled, a new randomization is performed
+
+#### Scenario: Repeat and start new buttons are both available
+
+- **GIVEN** a user has completed a quiz and is viewing the summary page
+- **WHEN** they view the available actions
+- **THEN** the system displays both a "Repeat Quiz" button and a "Start New Quiz" button
+- **AND** both buttons are clearly labeled with translated text
+- **AND** both buttons are keyboard accessible
+- **AND** the buttons are visually distinct in their purpose
+
+**Note**: Translation keys required:
+
+- `messages/en.json`: Add `"repeatQuizButton": "Repeat Quiz"`
+- `messages/sk.json`: Add `"repeatQuizButton": "Zopakovať kvíz"`
 
 ### Requirement: Quiz Session State
 
@@ -350,3 +412,4 @@ The system SHALL provide meaningful, context-specific page titles and meta descr
 - **THEN** the page provides a meaningful meta description
 - **AND** the description accurately describes the application's purpose
 - **AND** the title follows best practices for SEO (descriptive, unique per page)
+

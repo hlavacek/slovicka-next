@@ -84,6 +84,18 @@ function QuizPageContent() {
     }
   }
 
+  function handleRestartQuiz() {
+    if (!quizState) return;
+    // Reinitialize quiz with the same configuration
+    const newState = initializeQuiz(
+      quizState.config.wordSet,
+      quizState.config.sourceLanguage,
+      quizState.config.randomOrder,
+    );
+    setQuizState(newState);
+    setPhase("session");
+  }
+
   // Loading state
   if (!quizState) {
     return (
@@ -108,7 +120,7 @@ function QuizPageContent() {
       {phase === "summary" && (
         <QuizSummary
           result={calculateScore(quizState)}
-          wordSetId={wordSetId || undefined}
+          onRepeatQuiz={handleRestartQuiz}
         />
       )}
     </div>

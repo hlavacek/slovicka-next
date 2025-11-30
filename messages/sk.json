@@ -49,7 +49,6 @@
     "slovakLabel": "Slovenčina",
     "englishLabel": "Angličtina",
     "randomOrderLabel": "Náhodné poradie",
-    "startButton": "Začať precvičovanie",
     "noWordSets": "Nemáte ešte žiadne zoznamy slovíčok.",
     "createWordSetLink": "Vytvoriť prvý zoznam slovíčok",
     "createNewWordSetLink": "Upraviť zoznamy slovíčok",
@@ -62,6 +61,7 @@
     "correctCount": "Správne",
     "incorrectCount": "Nesprávne",
     "scoreLabel": "Skóre",
-    "startNewQuizButton": "Nové precvičovanie"
+    "startNewQuizButton": "Nové precvičovanie",
+    "repeatQuizButton": "Zopakovať"
   }
 }

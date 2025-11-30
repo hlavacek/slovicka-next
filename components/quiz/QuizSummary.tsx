@@ -4,21 +4,30 @@ import React from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { QuizResult } from "@/lib/quiz";
+import { QuizResult, SourceLanguage } from "@/lib/quiz";
 import SuccessIndicator from "@/components/quiz/SuccessIndicator";
 
 type QuizSummaryProps = {
   result: QuizResult;
-  wordSetId?: string;
+  onRepeatQuiz?: () => void;
 };
 
-export default function QuizSummary({ result, wordSetId }: QuizSummaryProps) {
+export default function QuizSummary({
+  result,
+  onRepeatQuiz,
+}: QuizSummaryProps) {
   const t = useTranslations("Quiz");
   const router = useRouter();
 
   function handleStartNew() {
-    const url = wordSetId ? `/?wordset=${wordSetId}` : "/";
+    const url = "/";
     router.push(url);
+  }
+
+  function handleRepeatQuiz() {
+    if (onRepeatQuiz) {
+      onRepeatQuiz();
+    }
   }
 
   return (
@@ -60,7 +69,12 @@ export default function QuizSummary({ result, wordSetId }: QuizSummaryProps) {
         </div>
       </div>
 
-      <Button onClick={handleStartNew}>{t("startNewQuizButton")}</Button>
+      <div className="flex gap-2">
+        <Button onClick={handleRepeatQuiz}>{t("repeatQuizButton")}</Button>
+        <Button onClick={handleStartNew} variant="outline">
+          {t("startNewQuizButton")}
+        </Button>
+      </div>
     </div>
   );
 }
