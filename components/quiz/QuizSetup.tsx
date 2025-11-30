@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { WordSet } from "@/lib/wordsets";
+import { TestSet } from "@/lib/wordsets";
 import { SourceLanguage } from "@/lib/quiz";
 import Link from "next/link";
 import { Switch } from "@/components/ui/switch";
@@ -18,7 +18,7 @@ import SuccessIndicator from "@/components/quiz/SuccessIndicator";
 import { Star, Sparkles, Trophy } from "lucide-react";
 
 type QuizSetupProps = {
-  wordSets: WordSet[];
+  wordSets: TestSet[];
 };
 
 export default function QuizSetup({ wordSets }: QuizSetupProps) {

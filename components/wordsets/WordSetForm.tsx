@@ -6,17 +6,17 @@ import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
-  WordPair,
-  WordSet,
-  loadWordSets,
-  saveWordSet,
-  exportWordSet,
-  importWordSet,
-  validateWordSetInput,
-  deleteWordSet,
+  TestPair,
+  TestSet,
+  loadTestSets,
+  saveTestSet,
+  exportTestSet,
+  importTestSet,
+  validateTestSetInput,
+  deleteTestSet,
 } from "@/lib/wordsets";
 
-type Row = WordPair & { id: string };
+type Row = { id: string; sk: string; en: string };
 
 function genId() {
   return `id-${Date.now().toString(36)}-${Math.floor(Math.random() * 10000)}`;
@@ -36,7 +36,7 @@ export default function WordSetForm({ className }: { className?: string }) {
   const t = useTranslations("WordSets");
   const [name, setName] = useState("");
   const [rows, setRows] = useState<Row[]>([{ id: genId(), sk: "", en: "" }]);
-  const [savedSets, setSavedSets] = useState<WordSet[]>([]);
+  const [savedSets, setSavedSets] = useState<TestSet[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [editingSetId, setEditingSetId] = useState<string | null>(null);
@@ -44,7 +44,7 @@ export default function WordSetForm({ className }: { className?: string }) {
 
   // Load saved sets on client side only to avoid hydration mismatch
   React.useEffect(() => {
-    setSavedSets(loadWordSets());
+    setSavedSets(loadTestSets());
   }, []);
 
   // Filter and sort saved word sets
@@ -66,7 +66,7 @@ export default function WordSetForm({ className }: { className?: string }) {
     return filtered;
   }, [savedSets, searchTerm]);
 
-  function updateRow(id: string, field: keyof WordPair, value: string) {
+  function updateRow(id: string, field: "sk" | "en", value: string) {
     setRows((r) =>
       r.map((row) => (row.id === id ? { ...row, [field]: value } : row)),
     );
@@ -81,8 +81,19 @@ export default function WordSetForm({ className }: { className?: string }) {
   }
 
   function validate(): boolean {
-    const entries = rows.map((r) => ({ sk: r.sk, en: r.en }));
-    const errorKey = validateWordSetInput(name, entries);
+    const entries: TestPair[] = rows.map((r) => ({
+      sk: r.sk
+        .trim()
+        .split(/\s+/)
+        .filter((s) => s.trim())
+        .map((text) => ({ text })),
+      en: r.en
+        .trim()
+        .split(/\s+/)
+        .filter((s) => s.trim())
+        .map((text) => ({ text })),
+    }));
+    const errorKey = validateTestSetInput(name, entries);
     if (errorKey) {
       setError(t(errorKey));
       return false;
@@ -93,21 +104,32 @@ export default function WordSetForm({ className }: { className?: string }) {
 
   function onSave() {
     if (!validate()) return;
-    const set: WordSet = {
+    const set: TestSet = {
       id: editingSetId || `ws-${Date.now()}`,
       name: name.trim(),
-      entries: rows.map((r) => ({ sk: r.sk.trim(), en: r.en.trim() })),
+      entries: rows.map((r) => ({
+        sk: r.sk
+          .trim()
+          .split(/\s+/)
+          .filter((s) => s.trim())
+          .map((text) => ({ text })),
+        en: r.en
+          .trim()
+          .split(/\s+/)
+          .filter((s) => s.trim())
+          .map((text) => ({ text })),
+      })),
       createdAt: new Date().toISOString(),
     };
-    saveWordSet(set);
-    setSavedSets(loadWordSets());
+    saveTestSet(set);
+    setSavedSets(loadTestSets());
     setName("");
     setRows([{ id: genId(), sk: "", en: "" }]);
     setEditingSetId(null);
   }
 
-  function onExport(set: WordSet) {
-    const json = exportWordSet(set);
+  function onExport(set: TestSet) {
+    const json = exportTestSet(set);
     downloadFile(`${set.name.replaceAll(" ", "-") || set.id}.json`, json);
   }
 
@@ -118,9 +140,9 @@ export default function WordSetForm({ className }: { className?: string }) {
     reader.onload = () => {
       try {
         const text = String(reader.result ?? "");
-        const set = importWordSet(text);
-        saveWordSet(set);
-        setSavedSets(loadWordSets());
+        const set = importTestSet(text);
+        saveTestSet(set);
+        setSavedSets(loadTestSets());
         setError(null);
       } catch (err: unknown) {
         const msg = (err as Error)?.message ?? String(err);
@@ -136,17 +158,23 @@ export default function WordSetForm({ className }: { className?: string }) {
     fileInputRef.current?.click();
   }
 
-  function loadSet(set: WordSet) {
+  function loadSet(set: TestSet) {
     setName(set.name);
-    setRows(set.entries.map((e) => ({ id: genId(), ...e })));
+    setRows(
+      set.entries.map((e) => ({
+        id: genId(),
+        sk: e.sk.map((t) => t.text).join(" "),
+        en: e.en.map((t) => t.text).join(" "),
+      })),
+    );
     setEditingSetId(set.id);
   }
 
-  function onDelete(set: WordSet) {
+  function onDelete(set: TestSet) {
     const confirmed = window.confirm(t("deleteConfirmation"));
     if (!confirmed) return;
-    deleteWordSet(set.id);
-    setSavedSets(loadWordSets());
+    deleteTestSet(set.id);
+    setSavedSets(loadTestSets());
   }
 
   return (

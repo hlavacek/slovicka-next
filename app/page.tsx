@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState, useEffect, startTransition, Suspense } from "react";
-import { WordSet, loadWordSets } from "@/lib/wordsets";
+import { TestSet, loadTestSets } from "@/lib/wordsets";
 import QuizSetup from "@/components/quiz/QuizSetup";
 
 function HomeContent() {
-  const [wordSets, setWordSets] = useState<WordSet[]>([]);
+  const [wordSets, setWordSets] = useState<TestSet[]>([]);
 
-  // Load word sets on client side to avoid hydration mismatch
+  // Load test sets on client side to avoid hydration mismatch
   useEffect(() => {
-    const sets = loadWordSets();
+    const sets = loadTestSets();
     startTransition(() => {
       setWordSets(sets);
     });

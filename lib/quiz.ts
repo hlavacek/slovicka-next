@@ -1,10 +1,10 @@
-import { WordSet, saveWordSet } from "./wordsets";
+import { TestSet, saveTestSet } from "./wordsets";
 import { shuffleArray } from "./utils";
 
 export type SourceLanguage = "sk" | "en";
 
 export type QuizConfig = {
-  wordSet: WordSet;
+  testSet: TestSet;
   sourceLanguage: SourceLanguage;
   randomOrder: boolean;
 };
@@ -33,14 +33,20 @@ export type QuizResult = {
 };
 
 export function initializeQuiz(
-  wordSet: WordSet,
+  testSet: TestSet,
   sourceLanguage: SourceLanguage,
   randomOrder: boolean = false,
 ): QuizState {
-  const questions: QuizQuestion[] = wordSet.entries.map((entry, index) => ({
+  const questions: QuizQuestion[] = testSet.entries.map((entry, index) => ({
     index,
-    sourceWord: sourceLanguage === "sk" ? entry.sk : entry.en,
-    targetWord: sourceLanguage === "sk" ? entry.en : entry.sk,
+    sourceWord:
+      sourceLanguage === "sk"
+        ? entry.sk.map((t) => t.text).join(" ")
+        : entry.en.map((t) => t.text).join(" "),
+    targetWord:
+      sourceLanguage === "sk"
+        ? entry.en.map((t) => t.text).join(" ")
+        : entry.sk.map((t) => t.text).join(" "),
     answered: false,
     correct: null,
     revealed: false,
@@ -49,7 +55,7 @@ export function initializeQuiz(
   const finalQuestions = randomOrder ? shuffleArray(questions) : questions;
 
   return {
-    config: { wordSet, sourceLanguage, randomOrder },
+    config: { testSet, sourceLanguage, randomOrder },
     questions: finalQuestions,
     currentIndex: 0,
     completed: false,
@@ -106,12 +112,12 @@ export function calculateScore(state: QuizState): QuizResult {
 
 export function updateWordSetStats(state: QuizState): void {
   const result = calculateScore(state);
-  const updatedWordSet: WordSet = {
-    ...state.config.wordSet,
+  const updatedTestSet: TestSet = {
+    ...state.config.testSet,
     lastQuizStats: {
       correct: result.correct,
       total: result.total,
     },
   };
-  saveWordSet(updatedWordSet);
+  saveTestSet(updatedTestSet);
 }

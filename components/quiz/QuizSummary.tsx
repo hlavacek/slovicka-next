@@ -4,7 +4,7 @@ import React from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { QuizResult, SourceLanguage } from "@/lib/quiz";
+import { QuizResult } from "@/lib/quiz";
 import SuccessIndicator from "@/components/quiz/SuccessIndicator";
 
 type QuizSummaryProps = {

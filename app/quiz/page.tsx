@@ -8,7 +8,7 @@ import React, {
   Suspense,
 } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { loadWordSets } from "@/lib/wordsets";
+import { loadTestSets } from "@/lib/wordsets";
 import {
   SourceLanguage,
   QuizState,
@@ -42,19 +42,17 @@ function QuizPageContent() {
       return null;
     }
 
-    // Load word sets and find the requested one
-    const wordSets = loadWordSets();
-    const wordSet = wordSets.find((ws) => ws.id === id);
+    // Load test sets and find the requested one
+    const testSets = loadTestSets();
+    const testSet = testSets.find((ws) => ws.id === id);
 
-    if (!wordSet) {
+    if (!testSet) {
       return null;
     }
 
     // Initialize quiz
-    return initializeQuiz(wordSet, source, random);
+    return initializeQuiz(testSet, source, random);
   }, [searchParams]);
-
-  const wordSetId = searchParams.get("id");
 
   // Redirect if invalid parameters, or initialize quiz state
   useEffect(() => {
@@ -88,7 +86,7 @@ function QuizPageContent() {
     if (!quizState) return;
     // Reinitialize quiz with the same configuration
     const newState = initializeQuiz(
-      quizState.config.wordSet,
+      quizState.config.testSet,
       quizState.config.sourceLanguage,
       quizState.config.randomOrder,
     );
