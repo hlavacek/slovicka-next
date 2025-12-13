@@ -2,18 +2,9 @@
 
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
-import {
-  TestSet,
-  loadTestSets,
-  importTestSet,
-  saveTestSet,
-} from "@/lib/wordsets";
+import { TestSet, loadTestSets } from "@/lib/wordsets";
 import WordSetEditor from "./WordSetEditor";
 import WordSetSearch from "./WordSetSearch";
-
-function genId() {
-  return `id-${Date.now().toString(36)}-${Math.floor(Math.random() * 10000)}`;
-}
 
 /**
  * WordSetForm component
