@@ -75,6 +75,8 @@
     "currentPoints": "Points",
     "sessionPointsLabel": "Session Points",
     "totalPointsLabel": "Total Points",
-    "pointsEarned": "Points Earned"
+    "pointsEarned": "Points Earned",
+    "resetPointsButton": "Reset all points",
+    "resetPointsConfirmation": "Are you sure you want to reset all points? This cannot be undone."
   }
 }

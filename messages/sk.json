@@ -74,6 +74,8 @@
     "currentPoints": "Body",
     "sessionPointsLabel": "Body v tomto kole",
     "totalPointsLabel": "Máš {totalPoints, plural, =0 {# bodov} =1 {# bod} few {# body} other {# bodov}}",
-    "pointsEarned": "Získané body"
+    "pointsEarned": "Získané body",
+    "resetPointsButton": "Vynulovať všetky body",
+    "resetPointsConfirmation": "Naozaj chcete vynulovať všetky body? Túto akciu nie je možné vrátiť späť."
   }
 }

@@ -15,7 +15,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import SuccessIndicator from "@/components/quiz/SuccessIndicator";
-import { Star, Sparkles, Trophy } from "lucide-react";
+import { Star, Sparkles, Trophy, Trash2 } from "lucide-react";
 
 type QuizSetupProps = {
   wordSets: TestSet[];
@@ -34,6 +34,13 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
   React.useEffect(() => {
     setTotalPoints(getTotalPoints());
   }, []);
+
+  function handleResetPoints() {
+    if (window.confirm(t("resetPointsConfirmation"))) {
+      localStorage.setItem("slovicka:totalPoints", "0");
+      setTotalPoints(0);
+    }
+  }
 
   // Filter and sort word sets
   const filteredWordSets = React.useMemo(() => {
@@ -84,7 +91,7 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
       <h2 className="mb-2 text-lg font-semibold">{t("title")}</h2>
 
       {/* Total Points Display */}
-      <div className="mb-4 flex items-center justify-center gap-3 bg-linear-to-r from-amber-50 to-yellow-50 rounded-lg p-4 border-2 border-amber-200">
+      <div className="mb-4 relative flex items-center justify-center gap-3 bg-linear-to-r from-amber-50 to-yellow-50 rounded-lg p-4 border-2 border-amber-200">
         <Trophy className="h-7 w-7 text-amber-600" />
         <div className="flex items-baseline gap-2">
           <span className="text-lg font-bold text-amber-700">
@@ -92,6 +99,14 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
           </span>
         </div>
         <Sparkles className="h-6 w-6 text-amber-500" />
+        <button
+          onClick={handleResetPoints}
+          className="absolute right-3 top-3 p-1.5 rounded-md hover:bg-amber-100 transition-colors group"
+          aria-label={t("resetPointsButton")}
+          title={t("resetPointsButton")}
+        >
+          <Trash2 className="h-6 w-6 text-amber-600 group-hover:text-amber-700" />
+        </button>
       </div>
 
       <div className="mb-2">
