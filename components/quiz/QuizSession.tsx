@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useTranslations } from "next-intl";
+import { Eye, CheckCircle, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { QuizState } from "@/lib/quiz";
@@ -80,6 +81,7 @@ export default function QuizSession({
             onClick={onReveal}
             className="flex-1 h-14 text-lg font-semibold"
           >
+            <Eye className="mr-2 h-5 w-5" />
             {t("showAnswerButton")}
           </Button>
         )}
@@ -89,13 +91,14 @@ export default function QuizSession({
               onClick={onMarkCorrect}
               className="flex-1 h-14 text-lg font-semibold bg-green-600 hover:bg-green-700 text-white"
             >
+              <CheckCircle className="mr-2 h-5 w-5" />
               {t("markCorrectButton")}
             </Button>
             <Button
               onClick={onMarkIncorrect}
-              variant="outline"
-              className="flex-1 h-14 text-lg font-semibold hover:bg-zinc-100"
+              className="flex-1 h-14 text-lg font-semibold bg-red-500 hover:bg-red-600 text-white"
             >
+              <XCircle className="mr-2 h-5 w-5" />
               {t("markIncorrectButton")}
             </Button>
           </>

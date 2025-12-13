@@ -87,8 +87,8 @@ export default function SuccessIndicator({
           />
 
           {/* Content overlay */}
-          <div className="relative flex items-center justify-between gap-2 px-4 py-3">
-            <span className={cn("text-sm font-semibold", text)}>
+          <div className="relative flex items-center justify-between gap-2 px-4 py-3 h-full">
+            <span className={cn("text-lg font-semibold", text)}>
               {percentage}%
             </span>
             <span className={cn("shrink-0", text)}>{icon}</span>
