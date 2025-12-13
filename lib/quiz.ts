@@ -2,6 +2,7 @@ import { TestSet, saveTestSet } from "./wordsets";
 import { shuffleArray } from "./utils";
 
 export const POINTS_PER_CORRECT_ANSWER = 1;
+export const BONUS_POINTS_PER_FAST_CORRECT_ANSWER = 2;
 
 export type SourceLanguage = "sk" | "en";
 
@@ -9,6 +10,7 @@ export type QuizConfig = {
   testSet: TestSet;
   sourceLanguage: SourceLanguage;
   randomOrder: boolean;
+  timedMode: boolean;
 };
 
 export type QuizQuestion = {
@@ -18,6 +20,7 @@ export type QuizQuestion = {
   answered: boolean;
   correct: boolean | null;
   revealed: boolean;
+  revealedBeforeTimeout: boolean;
 };
 
 export type QuizState = {
@@ -40,6 +43,7 @@ export function initializeQuiz(
   testSet: TestSet,
   sourceLanguage: SourceLanguage,
   randomOrder: boolean = false,
+  timedMode: boolean = true,
 ): QuizState {
   const questions: QuizQuestion[] = testSet.entries.map((entry, index) => ({
     index,
@@ -54,12 +58,13 @@ export function initializeQuiz(
     answered: false,
     correct: null,
     revealed: false,
+    revealedBeforeTimeout: false,
   }));
 
   const finalQuestions = randomOrder ? shuffleArray(questions) : questions;
 
   return {
-    config: { testSet, sourceLanguage, randomOrder },
+    config: { testSet, sourceLanguage, randomOrder, timedMode },
     questions: finalQuestions,
     currentIndex: 0,
     completed: false,
@@ -67,11 +72,15 @@ export function initializeQuiz(
   };
 }
 
-export function revealAnswer(state: QuizState): QuizState {
+export function revealAnswer(
+  state: QuizState,
+  beforeTimeout: boolean = false,
+): QuizState {
   const newQuestions = [...state.questions];
   newQuestions[state.currentIndex] = {
     ...newQuestions[state.currentIndex],
     revealed: true,
+    revealedBeforeTimeout: beforeTimeout,
   };
 
   return {
@@ -82,8 +91,10 @@ export function revealAnswer(state: QuizState): QuizState {
 
 export function recordAnswer(state: QuizState, isCorrect: boolean): QuizState {
   const newQuestions = [...state.questions];
+  const currentQuestion = newQuestions[state.currentIndex];
+
   newQuestions[state.currentIndex] = {
-    ...newQuestions[state.currentIndex],
+    ...currentQuestion,
     answered: true,
     correct: isCorrect,
   };
@@ -93,7 +104,15 @@ export function recordAnswer(state: QuizState, isCorrect: boolean): QuizState {
     ? state.currentIndex
     : state.currentIndex + 1;
 
-  const pointsToAdd = isCorrect ? POINTS_PER_CORRECT_ANSWER : 0;
+  // Calculate points: bonus if timed mode enabled and revealed before timeout
+  let pointsToAdd = 0;
+  if (isCorrect) {
+    if (state.config.timedMode && currentQuestion.revealedBeforeTimeout) {
+      pointsToAdd = BONUS_POINTS_PER_FAST_CORRECT_ANSWER;
+    } else {
+      pointsToAdd = POINTS_PER_CORRECT_ANSWER;
+    }
+  }
 
   return {
     ...state,

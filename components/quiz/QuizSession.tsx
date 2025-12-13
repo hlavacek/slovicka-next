@@ -10,7 +10,7 @@ import { speakWord } from "@/lib/speech";
 
 type QuizSessionProps = {
   state: QuizState;
-  onReveal: () => void;
+  onReveal: (beforeTimeout: boolean) => void;
   onMarkCorrect: () => void;
   onMarkIncorrect: () => void;
 };
@@ -26,6 +26,46 @@ export default function QuizSession({
   const progress = `${state.currentIndex + 1} / ${state.questions.length}`;
   const progressPercentage =
     ((state.currentIndex + 1) / state.questions.length) * 100;
+
+  // Timer state for timed mode
+  const [secondsRemaining, setSecondsRemaining] = React.useState(5);
+  const [timerActive, setTimerActive] = React.useState(false);
+
+  // Reset timer when question changes
+  React.useEffect(() => {
+    if (!currentQuestion.revealed && state.config.timedMode) {
+      setSecondsRemaining(5);
+      setTimerActive(true);
+    } else {
+      setTimerActive(false);
+    }
+  }, [state.currentIndex, currentQuestion.revealed, state.config.timedMode]);
+
+  // Countdown timer
+  React.useEffect(() => {
+    if (!timerActive || secondsRemaining <= 0) {
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      setSecondsRemaining((prev) => {
+        if (prev <= 1) {
+          setTimerActive(false);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [timerActive, secondsRemaining]);
+
+  // Handle reveal with timer tracking
+  const handleReveal = () => {
+    const beforeTimeout = timerActive && secondsRemaining > 0;
+    setTimerActive(false);
+    onReveal(beforeTimeout);
+  };
 
   // Speak the target word when the answer is revealed
   React.useEffect(() => {
@@ -92,11 +132,13 @@ export default function QuizSession({
       <div className="flex gap-3 mt-auto">
         {!currentQuestion.revealed && (
           <Button
-            onClick={onReveal}
+            onClick={handleReveal}
             className="flex-1 h-14 text-lg font-semibold"
           >
             <Eye className="mr-2 h-5 w-5" />
-            {t("showAnswerButton")}
+            {state.config.timedMode && timerActive && secondsRemaining > 0
+              ? t("showAnswerButtonWithTimer", { seconds: secondsRemaining })
+              : t("showAnswerButton")}
           </Button>
         )}
         {currentQuestion.revealed && (

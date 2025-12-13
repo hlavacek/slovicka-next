@@ -37,6 +37,7 @@ function QuizPageContent() {
     const id = searchParams.get("id");
     const source = searchParams.get("source") as SourceLanguage | null;
     const random = searchParams.get("random") === "true";
+    const timed = searchParams.get("timed") !== "false"; // Default to true
 
     // Validate required parameters
     if (!id || !source || (source !== "sk" && source !== "en")) {
@@ -52,7 +53,7 @@ function QuizPageContent() {
     }
 
     // Initialize quiz
-    return initializeQuiz(testSet, source, random);
+    return initializeQuiz(testSet, source, random, timed);
   }, [searchParams]);
 
   // Redirect if invalid parameters, or initialize quiz state
@@ -66,9 +67,9 @@ function QuizPageContent() {
     }
   }, [initialQuizState, quizState, router]);
 
-  function handleReveal() {
+  function handleReveal(beforeTimeout: boolean = false) {
     if (!quizState) return;
-    const newState = revealAnswer(quizState);
+    const newState = revealAnswer(quizState, beforeTimeout);
     setQuizState(newState);
   }
 
@@ -91,6 +92,7 @@ function QuizPageContent() {
       quizState.config.testSet,
       quizState.config.sourceLanguage,
       quizState.config.randomOrder,
+      quizState.config.timedMode,
     );
     setQuizState(newState);
     setPhase("session");

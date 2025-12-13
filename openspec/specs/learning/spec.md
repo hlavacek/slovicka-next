@@ -218,136 +218,111 @@ The system SHALL use next-intl for all user-facing text to support multiple lang
 
 ### Requirement: Quiz Setup Interface
 
-The system SHALL provide a quiz setup interface where users can select a word set to immediately launch a quiz. **The system SHALL provide a search input to filter word sets by name and display a scrollable list showing a maximum of 3 word sets at a time.** When the user clicks a word set, the system SHALL immediately navigate to the `/quiz` route with the currently selected settings. **The system SHALL organize source language and question order settings in a collapsible accordion section titled "Settings" that is collapsed by default, with default values of source language = Slovak and random order = true.** **The system SHALL display the success rate from the most recent quiz for each word set using a colorful, animated progress fill background on the word set card that indicates performance level with kid-friendly colors and icons.**
+The system SHALL provide a quiz setup interface where users can select a word set to immediately launch a quiz. **The system SHALL provide a search input to filter word sets by name and display a scrollable list showing a maximum of 3 word sets at a time.** When the user clicks a word set, the system SHALL immediately navigate to the `/quiz` route with the currently selected settings. **The system SHALL organize source language, question order, and timed mode settings in a collapsible accordion section titled "Settings" that is collapsed by default, with default values of source language = Slovak, random order = true, and timed mode = true.** **The system SHALL display the success rate from the most recent quiz for each word set using a colorful, animated progress fill background on the word set card that indicates performance level with kid-friendly colors and icons.**
 
-#### Scenario: User launches quiz by clicking word set
-
-- **GIVEN** a user has at least one saved word set
-- **WHEN** they navigate to `/`
-- **THEN** the system displays a search input for filtering word sets
-- **AND** displays a scrollable list of available word sets (max 3 visible)
-- **AND** each word set is displayed as a clickable card
-- **AND** displays a collapsible "Settings" accordion section (collapsed by default)
-- **AND** no "Start Quiz" button is visible
-- **AND** clicking a word set card immediately navigates to `/quiz?id=<wordset-id>&source=<current-source>&random=<current-random>`
-
-#### Scenario: Settings accordion controls quiz launch parameters
+#### Scenario: Timed mode toggle controls bonus points
 
 - **GIVEN** a user is on the quiz setup page
-- **WHEN** they expand the settings accordion and change source language to English
-- **AND** they click a word set card
-- **THEN** the quiz launches with source=en reflecting the accordion setting
+- **WHEN** they expand the settings accordion
+- **THEN** the system displays a "Timed Mode" toggle switch
+- **AND** the toggle is enabled by default
+- **AND** a label explains that timed mode awards bonus points for fast answers
+- **AND** the label is translated appropriately for the current locale
 
-#### Scenario: Word set cards are keyboard accessible
+#### Scenario: Timed mode setting persists in quiz URL
 
-- **GIVEN** a user is navigating with keyboard only
-- **WHEN** they tab to word set cards
-- **THEN** the system displays clear focus indicators
-- **AND** pressing Enter or Space on a focused card launches the quiz
-- **AND** the cards behave as interactive buttons
+- **GIVEN** a user has disabled timed mode in settings
+- **WHEN** they click a word set card to launch a quiz
+- **THEN** the system navigates to `/quiz?id=<wordset-id>&source=<source>&random=<random>&timed=false`
+- **AND** the quiz initializes with timed mode disabled
 
-#### Scenario: Word set cards provide clear visual feedback
+#### Scenario: Default quiz configuration includes timed mode
 
-- **GIVEN** a user views the quiz setup page
-- **WHEN** they hover over a word set card
-- **THEN** the system provides visual feedback (e.g., shadow, border change)
-- **AND** the cursor changes to pointer to indicate clickability
-
-#### Scenario: Default quiz configuration is applied
-
-- **GIVEN** a user clicks a word set card without opening settings
+- **GIVEN** a user clicks a word set card without changing settings
 - **WHEN** the quiz initializes
-- **THEN** the quiz uses Slovak as the source language (practice English → Slovak translation)
-- **AND** the quiz uses random question order
-- **AND** these defaults were applied from the accordion's initial state
-
-#### Scenario: User views success rate on word set cards
-
-- **GIVEN** a user has word sets with varying practice history
-- **WHEN** they view the quiz setup page
-- **THEN** the system displays each word set card
-- **AND** for word sets that have been practiced, shows the success rate as a percentage with a colorful background fill
-- **AND** the background fill is proportional to the success percentage (0-100% width)
-- **AND** the fill color is determined by performance thresholds: low (<60%) uses warm red/orange tones, medium (60-80%) uses yellow/amber tones, high (>80%) uses green/blue tones
-- **AND** the colors are kid-friendly, playful, and maintain sufficient contrast for accessibility
-- **AND** the fill animates smoothly when the component first renders
-- **AND** an icon appropriate to the performance level is displayed (e.g., star ratings or achievement badges)
-- **AND** for word sets that have not been practiced, shows a "not practiced" indicator without colorful background
-- **AND** the success rate reflects the most recent quiz results (correct answers / total questions)
-
-#### Scenario: Success rate updates after quiz completion
-
-- **GIVEN** a user completes a quiz for a word set
-- **WHEN** they navigate back to the quiz setup page
-- **THEN** the system displays the updated success rate for that word set
-- **AND** the colorful background fill animates to the new percentage
-- **AND** the fill color updates based on the new performance threshold
-- **AND** the icon updates to reflect the new performance level
-- **AND** the success rate reflects the performance from the just-completed quiz
-- **AND** previous success rates for the same word set are replaced
-
-#### Scenario: Word sets without statistics display correctly
-
-- **GIVEN** a user has word sets created before statistics tracking was implemented
-- **WHEN** they view the quiz setup page
-- **THEN** the system displays those word sets normally
-- **AND** shows a "not practiced" or similar indicator instead of a colorful background
-- **AND** allows the user to launch a quiz with those word sets
-- **AND** statistics are added after the first quiz completion
-
-#### Scenario: Colorful backgrounds are accessible
-
-- **GIVEN** a user is viewing word set cards with colorful success indicators
-- **WHEN** they assess the visual design
-- **THEN** the color combinations meet WCAG AA contrast requirements for text readability
-- **AND** the percentage text remains clearly visible against all background colors
-- **AND** the success information is available through text (percentage) as well as color
-- **AND** screen readers can access the success rate information through proper ARIA attributes
+- **THEN** the quiz uses timed mode enabled (default)
+- **AND** the countdown timer will be displayed during the quiz session
 
 ### Requirement: Sequential Quiz Flow
 
-The system SHALL present words from the selected word set one at a time, either in sequential or randomized order based on user preference, allowing users to self-assess their knowledge. **The system SHALL display quiz progress using a visual progress bar component alongside a text label for accessibility.**
+The system SHALL present words from the selected word set one at a time, either in sequential or randomized order based on user preference, allowing users to self-assess their knowledge. **The system SHALL display quiz progress using a visual progress bar component alongside a text label for accessibility. When timed mode is enabled, the system SHALL display a 5-second countdown timer in the "Show Answer" button, award 2 bonus points for correct answers revealed before timeout, and award standard 1 point for correct answers revealed after timeout.**
 
-#### Scenario: Quiz session uses sequential order by default
+#### Scenario: Countdown timer displays in Show Answer button
 
-- **GIVEN** a user has started a quiz without enabling random order
-- **WHEN** the quiz begins
-- **THEN** the system displays words in the original order from the word set
-- **AND** questions advance sequentially through the list
+- **GIVEN** a user is taking a quiz with timed mode enabled
+- **WHEN** a new question is displayed and the answer is not yet revealed
+- **THEN** the system displays a countdown timer in the "Show Answer" button
+- **AND** the button text shows "Show Answer (5)" initially
+- **AND** the countdown decrements every second: (5), (4), (3), (2), (1)
+- **AND** when the timer reaches 0, the button text changes to "Show Answer" without countdown
 
-#### Scenario: Quiz session uses random order when selected
+#### Scenario: User reveals answer before timer expires
 
-- **GIVEN** a user has started a quiz with random order enabled
-- **WHEN** the quiz begins
-- **THEN** the system displays words in a randomized order
-- **AND** each question appears exactly once
-- **AND** the randomization is performed using Fisher-Yates shuffle algorithm
-- **AND** the order differs from the original word set sequence
+- **GIVEN** a user is taking a quiz with timed mode enabled
+- **AND** the countdown timer shows 3 seconds remaining
+- **WHEN** the user clicks the "Show Answer" button
+- **THEN** the system reveals the answer immediately
+- **AND** records that the answer was revealed before timeout
+- **AND** the timer stops and is cleared
+- **AND** the countdown is no longer visible
 
-#### Scenario: Random order does not affect quiz functionality
+#### Scenario: User reveals answer after timer expires
 
-- **GIVEN** a user is taking a quiz in random order
-- **WHEN** they interact with the quiz (reveal, mark correct/incorrect, advance)
-- **THEN** all quiz features work identically to sequential order
-- **AND** progress tracking remains accurate
-- **AND** the final summary shows correct results
+- **GIVEN** a user is taking a quiz with timed mode enabled
+- **AND** the countdown timer has reached 0
+- **WHEN** the user clicks the "Show Answer" button
+- **THEN** the system reveals the answer immediately
+- **AND** records that the answer was NOT revealed before timeout
+- **AND** the button shows only "Show Answer" without any countdown
 
-#### Scenario: Quiz displays visual progress bar
+#### Scenario: Bonus points awarded for fast correct answer
 
-- **GIVEN** a user is taking a quiz
-- **WHEN** they view the quiz interface
-- **THEN** the system displays a visual progress bar showing percentage completion
-- **AND** displays text indicating current question number and total (e.g., "1 / 10")
-- **AND** the progress bar visually fills proportionally to quiz completion
-- **AND** the progress bar updates immediately when advancing to the next question
+- **GIVEN** a user revealed an answer before the timer expired (timed mode enabled)
+- **WHEN** the user marks the answer as correct
+- **THEN** the system awards 2 points for this question
+- **AND** updates the session points total by adding 2
+- **AND** the bonus points are reflected in the final quiz results
 
-#### Scenario: Progress bar is accessible
+#### Scenario: Standard points awarded for slow correct answer
 
-- **GIVEN** a user is taking a quiz
-- **WHEN** they use a screen reader or keyboard-only navigation
-- **THEN** the progress information is announced or available as text
-- **AND** the progress bar does not interfere with keyboard navigation
-- **AND** the progress label remains readable and understandable without visual cues
+- **GIVEN** a user revealed an answer after the timer expired (timed mode enabled)
+- **WHEN** the user marks the answer as correct
+- **THEN** the system awards 1 point for this question (standard)
+- **AND** updates the session points total by adding 1
+- **AND** the standard points are reflected in the final quiz results
+
+#### Scenario: No points awarded for incorrect answer regardless of timer
+
+- **GIVEN** a user revealed an answer (before OR after timer expired, timed mode enabled)
+- **WHEN** the user marks the answer as incorrect
+- **THEN** the system awards 0 points for this question
+- **AND** the session points total remains unchanged
+- **AND** no points are reflected for this question in final results
+
+#### Scenario: Timer resets for each new question
+
+- **GIVEN** a user completes a question in timed mode
+- **WHEN** the next question is displayed
+- **THEN** the system resets the countdown timer to 5 seconds
+- **AND** starts counting down automatically
+- **AND** the "Show Answer" button displays the countdown from the beginning
+
+#### Scenario: Timed mode disabled shows no timer
+
+- **GIVEN** a user is taking a quiz with timed mode disabled
+- **WHEN** a new question is displayed
+- **THEN** the system does NOT display any countdown timer
+- **AND** the "Show Answer" button shows only "Show Answer" text
+- **AND** all correct answers are worth 1 point (standard, no bonus)
+
+#### Scenario: Keyboard accessibility with countdown timer
+
+- **GIVEN** a user is taking a quiz with timed mode enabled using keyboard only
+- **WHEN** they press Tab to focus the "Show Answer" button during countdown
+- **THEN** the button receives focus with clear visual indicator
+- **AND** pressing Enter or Space reveals the answer immediately
+- **AND** the system correctly tracks whether reveal happened before timeout
+- **AND** the countdown does not interfere with keyboard navigation
 
 ### Requirement: Quiz Results Summary
 
@@ -400,40 +375,33 @@ The system SHALL display a summary of quiz results after all words have been rev
 
 ### Requirement: Quiz Session State
 
-The system SHALL maintain quiz session state in memory on the `/quiz` page and reset when a new quiz is started or the page is reloaded. The quiz SHALL read configuration from query parameters (`id`, `source`, `random`) and handle missing or invalid parameters gracefully.
+The system SHALL maintain quiz session state in memory on the `/quiz` page and reset when a new quiz is started or the page is reloaded. The quiz SHALL read configuration from query parameters (`id`, `source`, `random`, **`timed`**) and handle missing or invalid parameters gracefully.
 
-#### Scenario: Quiz loads from query parameters
+#### Scenario: Quiz loads timed mode from query parameters
 
-- **GIVEN** a user navigates to `/quiz?id=<valid-wordset-id>&source=sk&random=true`
+- **GIVEN** a user navigates to `/quiz?id=<valid-wordset-id>&source=sk&random=true&timed=true`
 - **WHEN** the page loads
 - **THEN** the system loads the word set from localStorage using the provided `id`
 - **AND** initializes the quiz with the specified source language (`sk`)
 - **AND** applies random order if `random=true`
-- **AND** displays the first question
+- **AND** enables timed mode with countdown timer
+- **AND** displays the first question with countdown active
 
-#### Scenario: Missing or invalid word set ID
+#### Scenario: Missing timed parameter defaults to true
 
-- **GIVEN** a user navigates to `/quiz` without an `id` parameter or with an invalid `id`
+- **GIVEN** a user navigates to `/quiz?id=<valid-wordset-id>&source=sk&random=true` (no timed parameter)
 - **WHEN** the page loads
-- **THEN** the system detects the missing or invalid word set
-- **AND** redirects the user to `/` (home/setup page)
-- **OR** displays an error message with a link back to home
+- **THEN** the system defaults timed mode to `true`
+- **AND** initializes the quiz with countdown timer enabled
+- **AND** awards bonus points for fast correct answers
 
-#### Scenario: In-progress quiz state is maintained
+#### Scenario: Timed mode false disables countdown and bonus
 
-- **GIVEN** a user is in the middle of a quiz session on `/quiz`
-- **WHEN** they answer questions sequentially
-- **THEN** the system maintains which words have been answered
-- **AND** tracks correct/incorrect marks
-- **AND** preserves the current position in the sequence
-
-#### Scenario: Page reload resets quiz
-
-- **GIVEN** a user is in the middle of a quiz session on `/quiz`
-- **WHEN** they reload the page
-- **THEN** the system re-initializes the quiz from query parameters
-- **AND** starts the quiz from the beginning
-- **AND** does not persist the partial session progress
+- **GIVEN** a user navigates to `/quiz?id=<valid-wordset-id>&source=sk&random=true&timed=false`
+- **WHEN** the page loads
+- **THEN** the system initializes the quiz with timed mode disabled
+- **AND** does not display countdown timer on any question
+- **AND** awards only standard 1 point for correct answers
 
 ### Requirement: Quiz Accessibility
 
@@ -691,4 +659,43 @@ The quiz system SHALL convert token arrays to display strings when presenting qu
 - **WHEN** they are tested after this change
 - **THEN** all existing scenarios continue to pass without modification
 - **AND** no behavioral regression occurs for fully-punctuated text
+
+### Requirement: Timed Quiz Bonus Points
+
+**When timed mode is enabled, the system SHALL display a 5-second countdown timer in the "Show Answer" button for each question. The system SHALL award 2 bonus points for correct answers revealed before the timer expires and 1 standard point for correct answers revealed after the timer expires. Timed mode SHALL be optional and configurable in quiz settings with a default value of enabled.**
+
+#### Scenario: Timer state persists until answer revealed or expired
+
+- **GIVEN** a user is viewing a question with countdown active
+- **WHEN** the timer is counting down (e.g., at 3 seconds)
+- **THEN** the system continues decrementing the timer every second
+- **AND** the button text updates in real-time
+- **AND** the timer does not reset or pause unless answer is revealed
+- **AND** when timer reaches 0, it stops and remains at 0
+
+#### Scenario: Timer does not interfere with speech pronunciation
+
+- **GIVEN** a user reveals an answer (before or after timeout)
+- **WHEN** the answer is displayed and speech pronunciation begins
+- **THEN** the countdown timer stops and is cleared
+- **AND** speech pronunciation works normally
+- **AND** no timer-related warnings or errors appear in console
+
+#### Scenario: Points calculation uses timer status
+
+- **GIVEN** the quiz state tracks `revealedBeforeTimeout` for each question
+- **WHEN** a user marks an answer as correct
+- **THEN** the system checks if `config.timedMode` is enabled
+- **AND** if timed mode enabled AND `revealedBeforeTimeout` is true: awards 2 points
+- **AND** if timed mode enabled AND `revealedBeforeTimeout` is false: awards 1 point
+- **AND** if timed mode disabled: always awards 1 point regardless of timer status
+
+#### Scenario: Quiz results reflect bonus points correctly
+
+- **GIVEN** a user completes a quiz with timed mode enabled
+- **AND** earned bonus points on some questions
+- **WHEN** the quiz summary is displayed
+- **THEN** the session points total includes all bonus points
+- **AND** the total points in localStorage are updated correctly
+- **AND** the displayed points match the calculated points from the quiz logic
 

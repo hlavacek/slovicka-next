@@ -26,6 +26,7 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
   const router = useRouter();
   const [sourceLanguage, setSourceLanguage] = useState<SourceLanguage>("sk");
   const [randomOrder, setRandomOrder] = useState<boolean>(true);
+  const [timedMode, setTimedMode] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedWordSet, setSelectedWordSet] = useState<TestSet | null>(null);
   const [totalPoints, setTotalPoints] = useState<number>(0);
@@ -70,6 +71,7 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
       id: wordSetId,
       source: sourceLanguage,
       random: effectiveRandomOrder.toString(),
+      timed: timedMode.toString(),
     });
     router.push(`/quiz?${params.toString()}`);
   }
@@ -241,6 +243,16 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
                   {t("randomOrderDisabledHint")}
                 </p>
               )}
+            </div>
+
+            <div className="mt-4">
+              <label className="flex cursor-pointer items-center gap-2">
+                <Switch
+                  checked={timedMode}
+                  onCheckedChange={(checked) => setTimedMode(checked)}
+                />
+                <span className="text-sm">{t("timedModeLabel")}</span>
+              </label>
             </div>
           </AccordionContent>
         </AccordionItem>
