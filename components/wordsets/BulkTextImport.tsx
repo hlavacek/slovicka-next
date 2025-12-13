@@ -80,6 +80,7 @@ export default function BulkTextImport({ onUpdate }: BulkTextImportProps) {
   /**
    * Split text into sentences by . ! ? separators
    * Keeps sentence endings for multi-word sentences, removes them for single words
+   * Allows final sentence to omit ending punctuation
    */
   function splitIntoSentences(text: string): string[] {
     // Match sentences with their ending punctuation
@@ -102,6 +103,27 @@ export default function BulkTextImport({ onUpdate }: BulkTextImportProps) {
         return trimmed;
       })
       .filter((s) => s.length > 0);
+
+    // Check for remaining text after the last punctuated sentence
+    let lastMatchEnd = 0;
+    const allMatches = Array.from(text.matchAll(regex));
+    if (allMatches.length > 0) {
+      const lastMatch = allMatches[allMatches.length - 1];
+      lastMatchEnd = (lastMatch.index || 0) + lastMatch[0].length;
+    }
+
+    const remainingText = text.substring(lastMatchEnd).trim();
+    if (remainingText.length > 0) {
+      // Apply the same single-word punctuation removal logic
+      const withoutPunctuation = remainingText.replace(/[.!?]$/, "").trim();
+      const isSingleWord = !withoutPunctuation.includes(" ");
+
+      if (isSingleWord) {
+        sentences.push(withoutPunctuation);
+      } else {
+        sentences.push(remainingText);
+      }
+    }
 
     return sentences;
   }
