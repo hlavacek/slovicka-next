@@ -39,7 +39,8 @@
     "bulkImportUpdateButton": "Aktualizovať z textu",
     "bulkImportWarningMismatch": "Upozornenie: Počet slovenských viet ({slovak}) a anglických viet ({english}) sa nezhoduje",
     "bulkImportWarningNoSeparator": "Očakávaný formát: Slovenské vety, dva riadky, potom anglické vety",
-    "bulkImportWarningEmpty": "Žiadny text na import"
+    "bulkImportWarningEmpty": "Žiadny text na import",
+    "allowRandomOrderLabel": "Povoliť náhodné poradie otázok"
   },
   "Quiz": {
     "loadingQuiz": "Načítavam precvičovanie...",
@@ -67,7 +68,8 @@
     "correctCount": "Správne",
     "incorrectCount": "Nesprávne",
     "scoreLabel": "Skóre",
-    "startNewQuizButton": "Nové precvičovanie",
-    "repeatQuizButton": "Zopakovať"
+    "startNewQuizButton": "Cvičiť niečo iné",
+    "repeatQuizButton": "Ešte raz",
+    "randomOrderDisabledHint": "Tento zoznam neumožňuje náhodné poradie otázok"
   }
 }

@@ -27,6 +27,7 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
   const [sourceLanguage, setSourceLanguage] = useState<SourceLanguage>("sk");
   const [randomOrder, setRandomOrder] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [selectedWordSet, setSelectedWordSet] = useState<TestSet | null>(null);
 
   // Filter and sort word sets
   const filteredWordSets = React.useMemo(() => {
@@ -48,10 +49,14 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
   }, [wordSets, searchTerm]);
 
   function handleWordSetClick(wordSetId: string) {
+    const wordSet = wordSets.find((ws) => ws.id === wordSetId);
+    const effectiveRandomOrder =
+      wordSet?.allowRandomOrder === false ? false : randomOrder;
+
     const params = new URLSearchParams({
       id: wordSetId,
       source: sourceLanguage,
-      random: randomOrder.toString(),
+      random: effectiveRandomOrder.toString(),
     });
     router.push(`/quiz?${params.toString()}`);
   }
@@ -109,7 +114,10 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
               return (
                 <button
                   key={ws.id}
-                  onClick={() => handleWordSetClick(ws.id)}
+                  onClick={() => {
+                    setSelectedWordSet(ws);
+                    handleWordSetClick(ws.id);
+                  }}
                   className="relative flex flex-col cursor-pointer rounded-lg border-2 transition-all hover:shadow-md border-zinc-200 bg-white hover:border-zinc-300 text-left w-full"
                 >
                   {/* Colorful progress bar at bottom */}
@@ -192,9 +200,15 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
                 <Switch
                   checked={randomOrder}
                   onCheckedChange={(checked) => setRandomOrder(checked)}
+                  disabled={selectedWordSet?.allowRandomOrder === false}
                 />
                 <span className="text-sm">{t("randomOrderLabel")}</span>
               </label>
+              {selectedWordSet?.allowRandomOrder === false && (
+                <p className="text-xs text-zinc-500 mt-1 ml-1">
+                  {t("randomOrderDisabledHint")}
+                </p>
+              )}
             </div>
           </AccordionContent>
         </AccordionItem>

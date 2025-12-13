@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import BulkTextImport from "@/components/wordsets/BulkTextImport";
 import {
   TestPair,
@@ -53,6 +54,7 @@ export default function WordSetEditor({
   const [name, setName] = useState("");
   const [rows, setRows] = useState<Row[]>([{ id: genId(), sk: "", en: "" }]);
   const [error, setError] = useState<string | null>(null);
+  const [allowRandomOrder, setAllowRandomOrder] = useState(true);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   // Apply load data when it changes
@@ -66,6 +68,7 @@ export default function WordSetEditor({
           en: entry.en.map((e) => e.text).join(" "),
         })),
       );
+      setAllowRandomOrder(editingSet.allowRandomOrder ?? true);
       onLoad();
     }
   }, [editingSet, onLoad]);
@@ -126,6 +129,7 @@ export default function WordSetEditor({
           .map((text) => ({ text })),
       })),
       createdAt: new Date().toISOString(),
+      allowRandomOrder,
     };
 
     // Save the test set
@@ -135,6 +139,7 @@ export default function WordSetEditor({
     setName("");
     setRows([{ id: genId(), sk: "", en: "" }]);
     setError(null);
+    setAllowRandomOrder(true);
 
     reloadTestSets();
   }
@@ -225,6 +230,16 @@ export default function WordSetEditor({
       </div>
 
       <BulkTextImport onUpdate={handleBulkUpdate} />
+
+      <div className="mb-4">
+        <label className="flex cursor-pointer items-center gap-2">
+          <Switch
+            checked={allowRandomOrder}
+            onCheckedChange={setAllowRandomOrder}
+          />
+          <span className="text-sm">{t("allowRandomOrderLabel")}</span>
+        </label>
+      </div>
 
       {error && <div className="mb-4 text-sm text-red-700">{error}</div>}
 

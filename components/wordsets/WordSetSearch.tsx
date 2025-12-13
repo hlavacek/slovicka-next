@@ -73,7 +73,7 @@ export default function WordSetSearch({
   }, [savedSets, searchTerm]);
 
   return (
-    <div className="mt-6">
+    <div className="mt-2">
       <h3 className="mb-2 text-sm font-medium">{t("savedSetsTitle")}</h3>
       {savedSets.length > 0 && (
         <input
@@ -84,7 +84,7 @@ export default function WordSetSearch({
           className="mb-3 w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-zinc-900 focus:outline-none focus:ring-1 focus:ring-zinc-900"
         />
       )}
-      <div className="flex flex-col gap-2 max-h-[200px] overflow-y-auto">
+      <div className="flex flex-col gap-2 max-h-[210px] overflow-y-auto">
         {savedSets.length === 0 && (
           <div className="text-sm text-zinc-500">{t("noSavedSets")}</div>
         )}

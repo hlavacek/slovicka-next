@@ -39,7 +39,8 @@
     "bulkImportUpdateButton": "Update from Text",
     "bulkImportWarningMismatch": "Warning: Number of Slovak sentences ({slovak}) and English sentences ({english}) don't match",
     "bulkImportWarningNoSeparator": "Expected format: Slovak sentences, two newlines, then English sentences",
-    "bulkImportWarningEmpty": "No text to import"
+    "bulkImportWarningEmpty": "No text to import",
+    "allowRandomOrderLabel": "Allow random question order"
   },
   "Quiz": {
     "loadingQuiz": "Loading quiz...",
@@ -69,6 +70,7 @@
     "incorrectCount": "Incorrect",
     "scoreLabel": "Score",
     "startNewQuizButton": "Start New Quiz",
-    "repeatQuizButton": "Repeat Quiz"
+    "repeatQuizButton": "Repeat Quiz",
+    "randomOrderDisabledHint": "This word set requires sequential order"
   }
 }

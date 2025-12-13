@@ -19,6 +19,7 @@ export type TestSet = {
   entries: TestPair[];
   createdAt?: string;
   lastQuizStats?: QuizStats;
+  allowRandomOrder?: boolean;
 };
 
 const STORAGE_KEY = "slovicka:testsets";
@@ -118,6 +119,7 @@ export function importTestSet(raw: string): TestSet {
     name: String(parsed.name),
     entries,
     createdAt: parsed.createdAt || new Date().toISOString(),
+    allowRandomOrder: parsed.allowRandomOrder !== undefined ? Boolean(parsed.allowRandomOrder) : true,
   };
   return set;
 }
