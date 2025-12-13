@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import BulkTextImport from "@/components/wordsets/BulkTextImport";
 import {
   TestPair,
   TestSet,
@@ -163,6 +164,16 @@ export default function WordSetEditor({
     e.target.value = "";
   }
 
+  function handleBulkUpdate(bulkRows: Array<{ sk: string; en: string }>) {
+    // Replace all existing rows with bulk imported rows
+    const newRows = bulkRows.map((row) => ({
+      id: genId(),
+      sk: row.sk,
+      en: row.en,
+    }));
+    setRows(newRows);
+  }
+
   return (
     <>
       <label className="mb-2 block text-sm font-medium">
@@ -212,6 +223,8 @@ export default function WordSetEditor({
           ))}
         </div>
       </div>
+
+      <BulkTextImport onUpdate={handleBulkUpdate} />
 
       {error && <div className="mb-4 text-sm text-red-700">{error}</div>}
 

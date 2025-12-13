@@ -30,23 +30,31 @@ export default function WordSetForm({ className }: { className?: string }) {
   }, []);
 
   return (
-    <div
-      className={cn(
-        "w-full rounded-md border bg-white p-6 shadow-sm",
-        className,
-      )}
-    >
-      <WordSetEditor
-        reloadTestSets={reloadTestSets}
-        editingSet={editingSet}
-        onLoad={worldSetLoaded}
-      />
-
-      <WordSetSearch
-        savedSets={savedSets}
-        onLoadSet={setEditingSet}
-        reloadTestSets={reloadTestSets}
-      />
-    </div>
+    <>
+      <div
+        className={cn(
+          "w-full rounded-md border bg-white p-6 shadow-sm mb-6",
+          className,
+        )}
+      >
+        <WordSetEditor
+          reloadTestSets={reloadTestSets}
+          editingSet={editingSet}
+          onLoad={worldSetLoaded}
+        />
+      </div>
+      <div
+        className={cn(
+          "w-full rounded-md border bg-white p-6 shadow-sm",
+          className,
+        )}
+      >
+        <WordSetSearch
+          savedSets={savedSets}
+          onLoadSet={setEditingSet}
+          reloadTestSets={reloadTestSets}
+        />
+      </div>
+    </>
   );
 }

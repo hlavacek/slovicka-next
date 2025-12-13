@@ -33,7 +33,13 @@
     "errorEmptyName": "Please provide a name for the word set",
     "errorEmptyEntries": "Please provide at least one entry",
     "errorMissingFields": "All rows must have both Slovak and English entries",
-    "backToQuizButton": "Back to Quiz"
+    "backToQuizButton": "Back to Quiz",
+    "bulkImportTitle": "Bulk Import from Text",
+    "bulkImportPlaceholder": "Slovak sentence 1. Slovak sentence 2.\n\nEnglish sentence 1. English sentence 2.",
+    "bulkImportUpdateButton": "Update from Text",
+    "bulkImportWarningMismatch": "Warning: Number of Slovak sentences ({slovak}) and English sentences ({english}) don't match",
+    "bulkImportWarningNoSeparator": "Expected format: Slovak sentences, two newlines, then English sentences",
+    "bulkImportWarningEmpty": "No text to import"
   },
   "Quiz": {
     "loadingQuiz": "Loading quiz...",
