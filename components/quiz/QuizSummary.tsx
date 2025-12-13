@@ -3,7 +3,7 @@
 import React from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { RotateCcw, Home } from "lucide-react";
+import { RotateCcw, Home, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { QuizResult } from "@/lib/quiz";
 import SuccessIndicator from "@/components/quiz/SuccessIndicator";
@@ -37,7 +37,7 @@ export default function QuizSummary({
 
       <div className="mb-6 space-y-4">
         {/* Colorful animated success indicator */}
-        <div className="rounded-lg border-2 border-zinc-200 overflow-hidden h-[104px]">
+        <div className="rounded-lg border-2 border-zinc-200 overflow-hidden h-[88px]">
           <SuccessIndicator
             percentage={result.percentage}
             animate={true}
@@ -47,10 +47,21 @@ export default function QuizSummary({
           />
         </div>
 
-        {/* <div className="flex items-center justify-between rounded-md border p-4">
-          <span className="text-sm font-medium">{t("totalWords")}</span>
-          <span className="text-2xl font-bold">{result.total}</span>
-        </div> */}
+        {/* Session Points Display */}
+        <div className="flex items-center justify-between rounded-lg border-2 border-amber-300 bg-gradient-to-r from-amber-50 to-yellow-50 p-6">
+          <div className="flex items-center gap-2">
+            <Star className="h-6 w-6 text-amber-600 fill-amber-600" />
+            <span className="text-lg font-semibold text-amber-900">
+              {t("pointsEarned")}
+            </span>
+          </div>
+          <span
+            className="text-4xl font-bold text-amber-600"
+            aria-label={`${t("pointsEarned")}: ${result.sessionPoints}`}
+          >
+            {result.sessionPoints}
+          </span>
+        </div>
 
         <div className="flex items-center justify-between rounded-lg border border-green-200 bg-green-50 p-6">
           <span className="text-lg font-semibold text-green-900">

@@ -59,6 +59,20 @@ export default function QuizSession({
         />
       </div>
 
+      {/* Points Display */}
+      {/* <div className="mb-6 flex items-center justify-center gap-2">
+        <Star className="h-6 w-6 text-amber-500 fill-amber-500" />
+        <span
+          className="text-3xl font-bold text-amber-600 transition-all duration-300"
+          aria-label={`${t("currentPoints")}: ${state.sessionPoints}`}
+        >
+          {state.sessionPoints}
+        </span>
+        <span className="text-lg font-semibold text-zinc-600">
+          {t("currentPoints")}
+        </span>
+      </div> */}
+
       <div className="mb-8 bg-zinc-50 rounded-lg p-6 border border-zinc-200">
         <div className="text-4xl font-bold text-zinc-900 text-center">
           {currentQuestion.sourceWord}

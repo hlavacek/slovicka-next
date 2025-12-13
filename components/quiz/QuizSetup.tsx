@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { TestSet } from "@/lib/wordsets";
-import { SourceLanguage } from "@/lib/quiz";
+import { SourceLanguage, getTotalPoints } from "@/lib/quiz";
 import Link from "next/link";
 import { Switch } from "@/components/ui/switch";
 import {
@@ -28,6 +28,12 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
   const [randomOrder, setRandomOrder] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedWordSet, setSelectedWordSet] = useState<TestSet | null>(null);
+  const [totalPoints, setTotalPoints] = useState<number>(0);
+
+  // Load total points on mount
+  React.useEffect(() => {
+    setTotalPoints(getTotalPoints());
+  }, []);
 
   // Filter and sort word sets
   const filteredWordSets = React.useMemo(() => {
@@ -76,6 +82,17 @@ export default function QuizSetup({ wordSets }: QuizSetupProps) {
   return (
     <div className="w-full max-w-2xl rounded-md border bg-white p-6 shadow-sm">
       <h2 className="mb-2 text-lg font-semibold">{t("title")}</h2>
+
+      {/* Total Points Display */}
+      <div className="mb-4 flex items-center justify-center gap-3 bg-linear-to-r from-amber-50 to-yellow-50 rounded-lg p-4 border-2 border-amber-200">
+        <Trophy className="h-7 w-7 text-amber-600" />
+        <div className="flex items-baseline gap-2">
+          <span className="text-lg font-bold text-amber-700">
+            {t("totalPointsLabel", { totalPoints })}
+          </span>
+        </div>
+        <Sparkles className="h-6 w-6 text-amber-500" />
+      </div>
 
       <div className="mb-2">
         <label className="mb-2 block text-sm font-medium">

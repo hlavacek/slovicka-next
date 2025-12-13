@@ -70,6 +70,10 @@
     "scoreLabel": "Skóre",
     "startNewQuizButton": "Cvičiť niečo iné",
     "repeatQuizButton": "Ešte raz",
-    "randomOrderDisabledHint": "Tento zoznam neumožňuje náhodné poradie otázok"
+    "randomOrderDisabledHint": "Tento zoznam neumožňuje náhodné poradie otázok",
+    "currentPoints": "Body",
+    "sessionPointsLabel": "Body v tomto kole",
+    "totalPointsLabel": "Máš {totalPoints, plural, =0 {# bodov} =1 {# bod} few {# body} other {# bodov}}",
+    "pointsEarned": "Získané body"
   }
 }

@@ -1,0 +1,84 @@
+## 1. Implementation
+
+- [x] 1.1 Add translation keys to `messages/en.json` and `messages/sk.json`
+  - [x] 1.1.1 Add `sessionPointsLabel` key (e.g., "Session Points", "Bodov v tomto kole")
+  - [x] 1.1.2 Add `totalPointsLabel` key (e.g., "Total Points", "Celkovo bodov")
+  - [x] 1.1.3 Add `pointsEarned` key (e.g., "Points Earned", "Získané body")
+  - [x] 1.1.4 Add `currentPoints` key (e.g., "Points", "Body")
+- [x] 1.2 Update quiz state and logic in `lib/quiz.ts`
+  - [x] 1.2.1 Add `sessionPoints` field to `QuizState` type (initialized to 0)
+  - [x] 1.2.2 Update `initializeQuiz` function to initialize `sessionPoints` to 0
+  - [x] 1.2.3 Update `recordAnswer` function to add 1 point for correct answers
+  - [x] 1.2.4 Add `POINTS_PER_CORRECT_ANSWER` constant (value: 1)
+  - [x] 1.2.5 Update `QuizResult` type to include `sessionPoints` field
+  - [x] 1.2.6 Update `calculateScore` function to include `sessionPoints` in result
+  - [x] 1.2.7 Add `getTotalPoints()` function to retrieve total points from localStorage
+  - [x] 1.2.8 Add `updateTotalPoints(sessionPoints: number)` function to add session points to total and persist
+  - [x] 1.2.9 Use localStorage key `"slovicka:totalPoints"` for persistence
+- [x] 1.3 Update QuizSession component to display session points
+  - [x] 1.3.1 Import `useTranslations` hook if not already imported
+  - [x] 1.3.2 Access `state.sessionPoints` from props
+  - [x] 1.3.3 Add points display section with playful styling (large font, colorful, with star/trophy icon)
+  - [x] 1.3.4 Position points counter prominently (e.g., near progress bar or in header)
+  - [x] 1.3.5 Use translation key for points label
+  - [x] 1.3.6 Add smooth CSS transition for point value updates
+  - [x] 1.3.7 Ensure points display is keyboard accessible and has appropriate ARIA labels
+- [x] 1.4 Update QuizSetup component to display total accumulated points
+  - [x] 1.4.1 Call `getTotalPoints()` on component mount to retrieve total points
+  - [x] 1.4.2 Store total points in component state
+  - [x] 1.4.3 Add total points display section with playful icons (stars, trophies, sparkles from lucide-react)
+  - [x] 1.4.4 Position display prominently near top of page or as dedicated section
+  - [x] 1.4.5 Use kid-friendly, colorful styling consistent with existing theme
+  - [x] 1.4.6 Use translation key for total points label
+  - [x] 1.4.7 Ensure display is accessible with appropriate ARIA labels
+- [x] 1.5 Update QuizSummary component to display session and total points
+  - [x] 1.5.1 Accept `sessionPoints` from `result` prop (already in QuizResult type)
+  - [x] 1.5.2 Call `getTotalPoints()` to get current total points
+  - [x] 1.5.3 Display session points earned with playful, celebratory styling
+  - [x] 1.5.4 Display updated total points (current total + session points)
+  - [x] 1.5.5 Use playful icons (stars, badges) and colorful presentation
+  - [x] 1.5.6 Use translation keys for all labels
+  - [x] 1.5.7 Ensure accessibility with ARIA labels
+- [x] 1.6 Update quiz page to handle total points update
+  - [x] 1.6.1 Import `updateTotalPoints` function from `lib/quiz.ts`
+  - [x] 1.6.2 Call `updateTotalPoints(result.sessionPoints)` after quiz completion
+  - [x] 1.6.3 Ensure update happens before navigating to summary
+
+## 2. Validation
+
+- [x] 2.1 Test points calculation during quiz
+  - [x] 2.1.1 Start a quiz and verify session points start at 0
+  - [x] 2.1.2 Mark an answer as correct and verify 1 point is added
+  - [x] 2.1.3 Mark an answer as incorrect and verify no points are added
+  - [x] 2.1.4 Complete a full quiz and verify correct point accumulation
+- [x] 2.2 Test total points persistence
+  - [x] 2.2.1 Complete a quiz and verify total points are updated in localStorage
+  - [x] 2.2.2 Refresh the page and verify total points persist
+  - [x] 2.2.3 Complete another quiz and verify total points accumulate correctly
+- [x] 2.3 Test points display in QuizSession
+  - [x] 2.3.1 Verify points counter is visible from the first question
+  - [x] 2.3.2 Verify points update with smooth animation after each answer
+  - [x] 2.3.3 Verify styling is playful and kid-friendly
+- [x] 2.4 Test points display in QuizSetup
+  - [x] 2.4.1 Verify total points display on quiz setup page
+  - [x] 2.4.2 Verify playful icons are present (stars, trophies, sparkles)
+  - [x] 2.4.3 Verify position is prominent and visually appealing
+- [x] 2.5 Test points display in QuizSummary
+  - [x] 2.5.1 Complete a quiz and verify session points are displayed
+  - [x] 2.5.2 Verify updated total points are displayed
+  - [x] 2.5.3 Verify playful, celebratory styling is applied
+- [x] 2.6 Test keyboard accessibility
+  - [x] 2.6.1 Verify all points displays have appropriate ARIA labels
+  - [x] 2.6.2 Test with screen reader to ensure point announcements work
+- [x] 2.7 Test internationalization
+  - [x] 2.7.1 Verify all points labels display correctly in English
+  - [x] 2.7.2 Verify all points labels display correctly in Slovak
+  - [x] 2.7.3 Verify numeric values display correctly in both languages
+- [x] 2.8 Test new user experience
+  - [x] 2.8.1 Clear localStorage and verify total points initialize to 0
+  - [x] 2.8.2 Verify 0 points display correctly on quiz setup
+
+## 3. Documentation
+
+- [x] 3.1 Verify all tasks completed
+- [x] 3.2 Mark proposal ready for review

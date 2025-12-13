@@ -71,6 +71,10 @@
     "scoreLabel": "Score",
     "startNewQuizButton": "Start New Quiz",
     "repeatQuizButton": "Repeat Quiz",
-    "randomOrderDisabledHint": "This word set requires sequential order"
+    "randomOrderDisabledHint": "This word set requires sequential order",
+    "currentPoints": "Points",
+    "sessionPointsLabel": "Session Points",
+    "totalPointsLabel": "Total Points",
+    "pointsEarned": "Points Earned"
   }
 }

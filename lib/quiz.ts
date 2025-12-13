@@ -1,6 +1,8 @@
 import { TestSet, saveTestSet } from "./wordsets";
 import { shuffleArray } from "./utils";
 
+export const POINTS_PER_CORRECT_ANSWER = 1;
+
 export type SourceLanguage = "sk" | "en";
 
 export type QuizConfig = {
@@ -23,6 +25,7 @@ export type QuizState = {
   questions: QuizQuestion[];
   currentIndex: number;
   completed: boolean;
+  sessionPoints: number;
 };
 
 export type QuizResult = {
@@ -30,6 +33,7 @@ export type QuizResult = {
   correct: number;
   incorrect: number;
   percentage: number;
+  sessionPoints: number;
 };
 
 export function initializeQuiz(
@@ -59,6 +63,7 @@ export function initializeQuiz(
     questions: finalQuestions,
     currentIndex: 0,
     completed: false,
+    sessionPoints: 0,
   };
 }
 
@@ -88,11 +93,14 @@ export function recordAnswer(state: QuizState, isCorrect: boolean): QuizState {
     ? state.currentIndex
     : state.currentIndex + 1;
 
+  const pointsToAdd = isCorrect ? POINTS_PER_CORRECT_ANSWER : 0;
+
   return {
     ...state,
     questions: newQuestions,
     currentIndex: nextIndex,
     completed: isLastQuestion,
+    sessionPoints: state.sessionPoints + pointsToAdd,
   };
 }
 
@@ -107,6 +115,7 @@ export function calculateScore(state: QuizState): QuizResult {
     correct,
     incorrect,
     percentage,
+    sessionPoints: state.sessionPoints,
   };
 }
 
@@ -120,4 +129,17 @@ export function updateWordSetStats(state: QuizState): void {
     },
   };
   saveTestSet(updatedTestSet);
+}
+
+export function getTotalPoints(): number {
+  if (typeof window === "undefined") return 0;
+  const stored = localStorage.getItem("slovicka:totalPoints");
+  return stored ? parseInt(stored, 10) : 0;
+}
+
+export function updateTotalPoints(sessionPoints: number): void {
+  if (typeof window === "undefined") return;
+  const currentTotal = getTotalPoints();
+  const newTotal = currentTotal + sessionPoints;
+  localStorage.setItem("slovicka:totalPoints", newTotal.toString());
 }
