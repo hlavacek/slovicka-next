@@ -45,10 +45,10 @@ export default function QuizSummary({
           />
         </div>
 
-        <div className="flex items-center justify-between rounded-md border p-4">
+        {/* <div className="flex items-center justify-between rounded-md border p-4">
           <span className="text-sm font-medium">{t("totalWords")}</span>
           <span className="text-2xl font-bold">{result.total}</span>
-        </div>
+        </div> */}
 
         <div className="flex items-center justify-between rounded-md border border-green-200 bg-green-50 p-4">
           <span className="text-sm font-medium text-green-900">
