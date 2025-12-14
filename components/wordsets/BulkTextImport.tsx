@@ -24,43 +24,21 @@ type ParseResult = {
 /**
  * BulkTextImport component
  *
- * Provides a collapsible interface for bulk importing word pairs from formatted text.
- * Expects format: Slovak sentences (ending with . ! ?) followed by two newlines,
- * then English sentences (ending with . ! ?).
+ * Provides a collapsible interface for bulk importing word pairs from separate text areas.
+ * Users paste Slovak sentences in one textarea and English sentences in another.
  */
 export default function BulkTextImport({ onUpdate }: BulkTextImportProps) {
   const t = useTranslations("WordSets");
-  const [bulkText, setBulkText] = useState("");
+  const [slovakText, setSlovakText] = useState("");
+  const [englishText, setEnglishText] = useState("");
   const [warning, setWarning] = useState<string | null>(null);
 
   /**
-   * Parse bulk text into Slovak and English sentence arrays
+   * Parse separate Slovak and English text into sentence arrays
    */
-  function parseBulkText(text: string): ParseResult {
-    if (!text.trim()) {
-      return { slovak: [], english: [], warning: null };
-    }
-
-    // Check for two consecutive newlines
-    const hasSeparator = /\n\s*\n/.test(text);
-
-    if (!hasSeparator) {
-      // Treat entire text as Slovak section
-      const sentences = splitIntoSentences(text);
-      return {
-        slovak: sentences,
-        english: [],
-        warning: t("bulkImportWarningNoSeparator"),
-      };
-    }
-
-    // Split by two newlines
-    const parts = text.split(/\n\s*\n/);
-    const slovakSection = parts[0] || "";
-    const englishSection = parts.slice(1).join("\n\n") || "";
-
-    const slovakSentences = splitIntoSentences(slovakSection);
-    const englishSentences = splitIntoSentences(englishSection);
+  function parseBulkText(slovakText: string, englishText: string): ParseResult {
+    const slovakSentences = splitIntoSentences(slovakText);
+    const englishSentences = splitIntoSentences(englishText);
 
     let warningMsg: string | null = null;
     if (slovakSentences.length !== englishSentences.length) {
@@ -132,12 +110,12 @@ export default function BulkTextImport({ onUpdate }: BulkTextImportProps) {
    * Handle update button click
    */
   function handleUpdate() {
-    if (!bulkText.trim()) {
+    if (!slovakText.trim() && !englishText.trim()) {
       setWarning(t("bulkImportWarningEmpty"));
       return;
     }
 
-    const result = parseBulkText(bulkText);
+    const result = parseBulkText(slovakText, englishText);
 
     // Set warning if present
     setWarning(result.warning);
@@ -160,21 +138,55 @@ export default function BulkTextImport({ onUpdate }: BulkTextImportProps) {
   }
 
   return (
-    <Accordion type="single" collapsible className="mb-4">
-      <AccordionItem value="bulk-import">
+    <Accordion
+      type="single"
+      collapsible
+      className="mb-2 rounded-lg border bg-card px-4 shadow-sm"
+      defaultValue="bulk-import"
+    >
+      <AccordionItem value="bulk-import" className="border-none">
         <AccordionTrigger>{t("bulkImportTitle")}</AccordionTrigger>
         <AccordionContent>
           <div className="space-y-3">
-            <textarea
-              value={bulkText}
-              onChange={(e) => {
-                setBulkText(e.target.value);
-                setWarning(null); // Clear warning when user types
-              }}
-              className="w-full rounded-md border px-3 py-2 font-mono text-sm"
-              rows={6}
-              placeholder={t("bulkImportPlaceholder")}
-            />
+            <div>
+              <label
+                htmlFor="slovak-text"
+                className="mb-1 block text-sm font-medium"
+              >
+                {t("bulkImportSlovakLabel")}
+              </label>
+              <textarea
+                id="slovak-text"
+                value={slovakText}
+                onChange={(e) => {
+                  setSlovakText(e.target.value);
+                  setWarning(null); // Clear warning when user types
+                }}
+                className="w-full rounded-md border px-3 py-2 font-mono text-sm"
+                rows={4}
+                placeholder={t("bulkImportSlovakPlaceholder")}
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="english-text"
+                className="mb-1 block text-sm font-medium"
+              >
+                {t("bulkImportEnglishLabel")}
+              </label>
+              <textarea
+                id="english-text"
+                value={englishText}
+                onChange={(e) => {
+                  setEnglishText(e.target.value);
+                  setWarning(null); // Clear warning when user types
+                }}
+                className="w-full rounded-md border px-3 py-2 font-mono text-sm"
+                rows={4}
+                placeholder={t("bulkImportEnglishPlaceholder")}
+              />
+            </div>
 
             {warning && (
               <div className="text-sm text-amber-700 dark:text-amber-500">

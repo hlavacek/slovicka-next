@@ -54,7 +54,7 @@ export default function WordSetEditor({
   const [name, setName] = useState("");
   const [rows, setRows] = useState<Row[]>([{ id: genId(), sk: "", en: "" }]);
   const [error, setError] = useState<string | null>(null);
-  const [allowRandomOrder, setAllowRandomOrder] = useState(true);
+  const [allowRandomOrder, setAllowRandomOrder] = useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   // Apply load data when it changes
