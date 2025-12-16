@@ -82,7 +82,7 @@
     "resetPointsButton": "Vynulovať všetky body",
     "resetPointsConfirmation": "Naozaj chcete vynulovať všetky body? Túto akciu nie je možné vrátiť späť.",
     "unknownPairsCount": "Neznáme páry",
-    "trainUnknownPairsButton": "Opakovat neznáme ({count})",
+    "trainUnknownPairsButton": "Opakovat nesprávne ({count})",
     "trainingSummaryTitle": "Tréning dokončený",
     "noUnknownPairs": "Výborne! Poznáš všetky páry."
   }
