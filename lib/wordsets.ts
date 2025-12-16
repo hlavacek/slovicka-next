@@ -6,6 +6,7 @@ export type SentenceToken = {
 export type TestPair = {
   sk: SentenceToken[];
   en: SentenceToken[];
+  knowledgeLevel?: "known" | "unknown";
 };
 
 export type QuizStats = {
@@ -83,6 +84,13 @@ export function importTestSet(raw: string): TestSet {
     const obj = e as Record<string, unknown>;
     const sk = obj.sk;
     const en = obj.en;
+    const knowledgeLevel = obj.knowledgeLevel;
+
+    // Validate and normalize knowledgeLevel
+    let normalizedKnowledgeLevel: "known" | "unknown" | undefined = undefined;
+    if (knowledgeLevel === "known" || knowledgeLevel === "unknown") {
+      normalizedKnowledgeLevel = knowledgeLevel;
+    }
 
     // Handle token arrays
     if (Array.isArray(sk) && Array.isArray(en)) {
@@ -101,6 +109,7 @@ export function importTestSet(raw: string): TestSet {
             icon: t.icon ? String(t.icon) : undefined,
           };
         }),
+        knowledgeLevel: normalizedKnowledgeLevel,
       };
     }
 
@@ -109,6 +118,7 @@ export function importTestSet(raw: string): TestSet {
       return {
         sk: [{ text: sk }],
         en: [{ text: en }],
+        knowledgeLevel: normalizedKnowledgeLevel,
       };
     }
 
@@ -119,7 +129,10 @@ export function importTestSet(raw: string): TestSet {
     name: String(parsed.name),
     entries,
     createdAt: parsed.createdAt || new Date().toISOString(),
-    allowRandomOrder: parsed.allowRandomOrder !== undefined ? Boolean(parsed.allowRandomOrder) : true,
+    allowRandomOrder:
+      parsed.allowRandomOrder !== undefined
+        ? Boolean(parsed.allowRandomOrder)
+        : true,
   };
   return set;
 }

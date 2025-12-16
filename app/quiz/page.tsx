@@ -38,6 +38,11 @@ function QuizPageContent() {
     const source = searchParams.get("source") as SourceLanguage | null;
     const random = searchParams.get("random") === "true";
     const timed = searchParams.get("timed") !== "false"; // Default to true
+    const filterParam = searchParams.get("filter");
+    const filter =
+      filterParam === "known" || filterParam === "unknown"
+        ? filterParam
+        : undefined;
 
     // Validate required parameters
     if (!id || !source || (source !== "sk" && source !== "en")) {
@@ -53,19 +58,28 @@ function QuizPageContent() {
     }
 
     // Initialize quiz
-    return initializeQuiz(testSet, source, random, timed);
+    const quizState = initializeQuiz(testSet, source, random, timed, filter);
+
+    // If filter resulted in empty quiz, return null to trigger redirect
+    if (quizState.questions.length === 0) {
+      return null;
+    }
+
+    return quizState;
   }, [searchParams]);
 
   // Redirect if invalid parameters, or initialize quiz state
   useEffect(() => {
     if (initialQuizState === null) {
       router.push("/");
-    } else if (quizState === null) {
+    } else {
+      // Reset quiz state when initialQuizState changes (e.g., when navigating to filtered quiz)
       startTransition(() => {
         setQuizState(initialQuizState);
+        setPhase("session");
       });
     }
-  }, [initialQuizState, quizState, router]);
+  }, [initialQuizState, router]);
 
   function handleReveal(beforeTimeout: boolean = false) {
     if (!quizState) return;
@@ -98,6 +112,19 @@ function QuizPageContent() {
     setPhase("session");
   }
 
+  function handleTrainUnknown() {
+    if (!quizState) return;
+    // Navigate to quiz with filter=unknown
+    const params = new URLSearchParams({
+      id: quizState.config.testSet.id,
+      source: quizState.config.sourceLanguage,
+      random: "false", // Sequential order for training
+      timed: String(quizState.config.timedMode),
+      filter: "unknown",
+    });
+    router.push(`/quiz?${params.toString()}`);
+  }
+
   // Loading state
   if (!quizState) {
     return (
@@ -122,7 +149,9 @@ function QuizPageContent() {
       {phase === "summary" && (
         <QuizSummary
           result={calculateScore(quizState)}
+          quizState={quizState}
           onRepeatQuiz={handleRestartQuiz}
+          onTrainUnknown={handleTrainUnknown}
         />
       )}
     </div>

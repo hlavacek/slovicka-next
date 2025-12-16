@@ -3,22 +3,29 @@
 import React from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { RotateCcw, Home, Star } from "lucide-react";
+import { RotateCcw, Home, Star, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { QuizResult } from "@/lib/quiz";
+import { QuizResult, QuizState, getUnknownPairIndices } from "@/lib/quiz";
 import SuccessIndicator from "@/components/quiz/SuccessIndicator";
 
 type QuizSummaryProps = {
   result: QuizResult;
+  quizState: QuizState;
   onRepeatQuiz?: () => void;
+  onTrainUnknown?: () => void;
 };
 
 export default function QuizSummary({
   result,
+  quizState,
   onRepeatQuiz,
+  onTrainUnknown,
 }: QuizSummaryProps) {
   const t = useTranslations("Quiz");
   const router = useRouter();
+
+  const unknownPairIndices = getUnknownPairIndices(quizState);
+  const unknownCount = unknownPairIndices.length;
 
   function handleStartNew() {
     const url = "/";
@@ -28,6 +35,12 @@ export default function QuizSummary({
   function handleRepeatQuiz() {
     if (onRepeatQuiz) {
       onRepeatQuiz();
+    }
+  }
+
+  function handleTrainUnknown() {
+    if (onTrainUnknown) {
+      onTrainUnknown();
     }
   }
 
@@ -82,18 +95,30 @@ export default function QuizSummary({
         </div>
       </div>
 
-      <div className="flex gap-3">
+      {/* Train Unknown Pairs Button - only show if there are unknown pairs */}
+      {unknownCount > 0 && <div className="mb-3"></div>}
+
+      <div className="flex flex-wrap gap-3">
         <Button
           onClick={handleRepeatQuiz}
-          className="flex-1 h-14 text-lg font-semibold"
+          className="flex-1 min-w-[210px] h-14 text-lg font-semibold"
         >
           <RotateCcw className="mr-2 h-5 w-5" />
           {t("repeatQuizButton")}
         </Button>
+        {unknownCount > 0 && (
+          <Button
+            onClick={handleTrainUnknown}
+            className="flex-1 min-w-[210px] h-14 text-lg font-semibold bg-red-500 hover:bg-rose-400 text-white"
+          >
+            <Target className="mr-2 h-5 w-5" />
+            {t("trainUnknownPairsButton", { count: unknownCount })}
+          </Button>
+        )}
         <Button
           onClick={handleStartNew}
           variant="outline"
-          className="flex-1 h-14 text-lg font-semibold"
+          className="flex-1 min-w-[210px] h-14 text-lg font-semibold"
         >
           <Home className="mr-2 h-5 w-5" />
           {t("startNewQuizButton")}

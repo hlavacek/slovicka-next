@@ -44,22 +44,36 @@ export function initializeQuiz(
   sourceLanguage: SourceLanguage,
   randomOrder: boolean = false,
   timedMode: boolean = true,
+  filter?: "known" | "unknown",
 ): QuizState {
-  const questions: QuizQuestion[] = testSet.entries.map((entry, index) => ({
-    index,
-    sourceWord:
-      sourceLanguage === "sk"
-        ? entry.sk.map((t) => t.text).join(" ")
-        : entry.en.map((t) => t.text).join(" "),
-    targetWord:
-      sourceLanguage === "sk"
-        ? entry.en.map((t) => t.text).join(" ")
-        : entry.sk.map((t) => t.text).join(" "),
-    answered: false,
-    correct: null,
-    revealed: false,
-    revealedBeforeTimeout: false,
-  }));
+  // Filter entries based on knowledge level if filter is provided
+  let filteredEntries = testSet.entries;
+  if (filter) {
+    filteredEntries = testSet.entries.filter(
+      (entry) => entry.knowledgeLevel === filter,
+    );
+  }
+
+  const questions: QuizQuestion[] = filteredEntries.map((entry) => {
+    // Find the original index in testSet.entries
+    const originalIndex = testSet.entries.indexOf(entry);
+
+    return {
+      index: originalIndex,
+      sourceWord:
+        sourceLanguage === "sk"
+          ? entry.sk.map((t) => t.text).join(" ")
+          : entry.en.map((t) => t.text).join(" "),
+      targetWord:
+        sourceLanguage === "sk"
+          ? entry.en.map((t) => t.text).join(" ")
+          : entry.sk.map((t) => t.text).join(" "),
+      answered: false,
+      correct: null,
+      revealed: false,
+      revealedBeforeTimeout: false,
+    };
+  });
 
   const finalQuestions = randomOrder ? shuffleArray(questions) : questions;
 
@@ -140,14 +154,15 @@ export function calculateScore(state: QuizState): QuizResult {
 
 export function updateWordSetStats(state: QuizState): void {
   const result = calculateScore(state);
-  const updatedTestSet: TestSet = {
-    ...state.config.testSet,
+  const updatedTestSet = updateKnowledgeLevels(state);
+  const finalTestSet: TestSet = {
+    ...updatedTestSet,
     lastQuizStats: {
       correct: result.correct,
       total: result.total,
     },
   };
-  saveTestSet(updatedTestSet);
+  saveTestSet(finalTestSet);
 }
 
 export function getTotalPoints(): number {
@@ -161,4 +176,39 @@ export function updateTotalPoints(sessionPoints: number): void {
   const currentTotal = getTotalPoints();
   const newTotal = currentTotal + sessionPoints;
   localStorage.setItem("slovicka:totalPoints", newTotal.toString());
+}
+
+/**
+ * Get indices of test pairs that were answered incorrectly in the quiz
+ */
+export function getUnknownPairIndices(state: QuizState): number[] {
+  return state.questions.filter((q) => q.correct === false).map((q) => q.index);
+}
+
+/**
+ * Update knowledge levels for test pairs based on quiz results
+ * Returns a new TestSet with updated knowledge levels
+ */
+export function updateKnowledgeLevels(state: QuizState): TestSet {
+  const updatedEntries = state.config.testSet.entries.map((entry, index) => {
+    const question = state.questions.find((q) => q.index === index);
+
+    // If this pair was not included in the quiz, preserve its existing knowledge level
+    if (!question) {
+      return entry;
+    }
+
+    // Update knowledge level based on correctness
+    const knowledgeLevel: "known" | "unknown" =
+      question.correct === true ? "known" : "unknown";
+    return {
+      ...entry,
+      knowledgeLevel,
+    };
+  });
+
+  return {
+    ...state.config.testSet,
+    entries: updatedEntries,
+  };
 }

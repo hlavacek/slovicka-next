@@ -80,6 +80,10 @@
     "totalPointsLabel": "Máš {totalPoints, plural, =0 {# bodov} =1 {# bod} few {# body} other {# bodov}}",
     "pointsEarned": "Získané body",
     "resetPointsButton": "Vynulovať všetky body",
-    "resetPointsConfirmation": "Naozaj chcete vynulovať všetky body? Túto akciu nie je možné vrátiť späť."
+    "resetPointsConfirmation": "Naozaj chcete vynulovať všetky body? Túto akciu nie je možné vrátiť späť.",
+    "unknownPairsCount": "Neznáme páry",
+    "trainUnknownPairsButton": "Opakovat neznáme ({count})",
+    "trainingSummaryTitle": "Tréning dokončený",
+    "noUnknownPairs": "Výborne! Poznáš všetky páry."
   }
 }

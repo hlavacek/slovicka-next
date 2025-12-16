@@ -81,6 +81,10 @@
     "totalPointsLabel": "Total Points",
     "pointsEarned": "Points Earned",
     "resetPointsButton": "Reset all points",
-    "resetPointsConfirmation": "Are you sure you want to reset all points? This cannot be undone."
+    "resetPointsConfirmation": "Are you sure you want to reset all points? This cannot be undone.",
+    "unknownPairsCount": "Unknown Pairs",
+    "trainUnknownPairsButton": "Train Unknown Pairs ({count})",
+    "trainingSummaryTitle": "Training Complete",
+    "noUnknownPairs": "Great! You know all the pairs."
   }
 }
