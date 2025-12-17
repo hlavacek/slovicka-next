@@ -129,7 +129,7 @@ export default function QuizSession({
         )}
       </div>
 
-      <div className="flex gap-3 mt-auto">
+      <div className="flex gap-3 mt-auto flex-wrap">
         {!currentQuestion.revealed && (
           <Button
             onClick={handleReveal}
